@@ -1,6 +1,5 @@
 import { Web3Provider } from '@ethersproject/providers';
 import { getNetwork } from '@ethersproject/networks';
-import { ethers } from 'ethers';
 
 export const getLibrary = (provider: any): Web3Provider => {
   const library = new Web3Provider(provider);

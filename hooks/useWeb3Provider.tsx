@@ -1,5 +1,8 @@
+import notification from "antd/es/notification";
 import { BrowserProvider, ethers, JsonRpcSigner } from "ethers";
 import { useCallback, useEffect, useState } from "react";
+
+declare var window: any
 
 export interface IWeb3State {
   address: string | null;
@@ -17,17 +20,15 @@ const useWeb3Provider = () => {
     provider: null,
     isAuthenticated: false,
   };
-
   const [state, setState] = useState<IWeb3State>(initialWeb3State);
 
   const connectWallet = useCallback(async () => {
     if (state.isAuthenticated) return;
-
     try {
       const { ethereum } = window;
 
       if (!ethereum) {
-        //TODO return toast
+        notification.error({ message: "No tienes instalado metamask" })
       }
       const provider = new ethers.BrowserProvider(ethereum);
 
@@ -36,7 +37,6 @@ const useWeb3Provider = () => {
       if (accounts.length > 0) {
         const signer = await provider.getSigner();
         const chain = Number(await (await provider.getNetwork()).chainId);
-
         setState({
           ...state,
           address: accounts[0],
@@ -45,15 +45,16 @@ const useWeb3Provider = () => {
           provider,
           isAuthenticated: true,
         });
-
         localStorage.setItem("isAuthenticated", "true");
+        notification.success({ message: "Cartera conectada con éxito en la cuenta", description: accounts[0] })
       }
-    } catch {}
+    } catch { }
   }, [state]);
 
   const disconnect = () => {
     setState(initialWeb3State);
     localStorage.removeItem("isAuthenticated");
+    notification.success({ message: "Cartera desconectada con éxito"})
   };
 
   useEffect(() => {
