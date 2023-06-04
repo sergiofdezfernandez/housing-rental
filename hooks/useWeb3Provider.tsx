@@ -1,5 +1,4 @@
 import { BrowserProvider, ethers, JsonRpcSigner } from "ethers";
-import { useToast } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
 
 export interface IWeb3State {
@@ -19,7 +18,6 @@ const useWeb3Provider = () => {
     isAuthenticated: false,
   };
 
-  const toast = useToast();
   const [state, setState] = useState<IWeb3State>(initialWeb3State);
 
   const connectWallet = useCallback(async () => {
@@ -29,12 +27,7 @@ const useWeb3Provider = () => {
       const { ethereum } = window;
 
       if (!ethereum) {
-        return toast({
-          status: "error",
-          position: "top-right",
-          title: "Error",
-          description: "No ethereum wallet found",
-        });
+        //TODO return toast
       }
       const provider = new ethers.BrowserProvider(ethereum);
 
@@ -56,7 +49,7 @@ const useWeb3Provider = () => {
         localStorage.setItem("isAuthenticated", "true");
       }
     } catch {}
-  }, [state, toast]);
+  }, [state]);
 
   const disconnect = () => {
     setState(initialWeb3State);
