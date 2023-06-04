@@ -1,4 +1,4 @@
-import notification from "antd/es/notification";
+import { message, notification } from "antd";
 import { BrowserProvider, ethers, JsonRpcSigner } from "ethers";
 import { useCallback, useEffect, useState } from "react";
 
@@ -54,7 +54,7 @@ const useWeb3Provider = () => {
   const disconnect = () => {
     setState(initialWeb3State);
     localStorage.removeItem("isAuthenticated");
-    notification.success({ message: "Cartera desconectada con éxito"})
+    notification.info({ message: "Cartera desconectada" })
   };
 
   useEffect(() => {
