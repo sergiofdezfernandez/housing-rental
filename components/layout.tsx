@@ -44,6 +44,10 @@ export default function AppLayout({ children }: LayoutProps) {
                         <span>Registrar propiedad</span>
                         <Link href={'/registerProperty'}></Link>
                     </Menu.Item>
+                    <Menu.Item key={5}>
+                        <span>Alquilar propiedad</span>
+                        <Link href={'/rentProperty'}></Link>
+                    </Menu.Item>
                     {!isAuthenticated ? (
                         <Menu.Item key={2} onClick={connectWallet}>
                             <WalletFilled></WalletFilled>
