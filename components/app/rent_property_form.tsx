@@ -23,7 +23,7 @@ const RentPropertyForm: React.FC = () => {
     try {
       const tx = await contract.rentProperty(
         {
-          address: values.tenantAddress,
+          id: values.tenantAddress,
           name: values.tenantName,
           phoneNumber: values.tenantPhone,
           email: values.tenantEmail,
