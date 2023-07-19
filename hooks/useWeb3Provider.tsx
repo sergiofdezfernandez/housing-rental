@@ -12,6 +12,7 @@ export interface IWeb3State {
   provider: BrowserProvider | null;
   isAuthenticated: boolean;
   contract: any | null;
+  ethereum: any;
 }
 
 const useWeb3Provider = () => {
@@ -22,26 +23,30 @@ const useWeb3Provider = () => {
     provider: null,
     isAuthenticated: false,
     contract: null,
+    ethereum: undefined,
   };
   const [state, setState] = useState<IWeb3State>(initialWeb3State);
 
   const connectWallet = useCallback(async () => {
-    if (state.isAuthenticated) return;
+    const { ethereum } = window;
+    if (
+      state.isAuthenticated ||
+      typeof window === undefined ||
+      window.ethereum === undefined
+    )
+      return;
     try {
-      const { ethereum } = window;
-
       if (!ethereum) {
         notification.error({ message: "No tienes instalado metamask" });
       }
       const provider = new ethers.BrowserProvider(ethereum);
-
       const accounts: string[] = await provider.send("eth_requestAccounts", []);
 
       if (accounts.length > 0) {
         const signer = await provider.getSigner();
         const chain = Number(await (await provider.getNetwork()).chainId);
-        if(chain !== 97){
-          notification.error({ message: "Cambie la red a ethereum" });
+        if (chain !== 97) {
+          notification.error({ message: "Cambie la red a binanceTestNet" });
           return;
         }
         setState({
@@ -56,6 +61,7 @@ const useWeb3Provider = () => {
             HousingRentalSystemContract.abi,
             signer
           ),
+          ethereum: ethereum,
         });
         localStorage.setItem("isAuthenticated", "true");
         notification.success({
@@ -71,30 +77,6 @@ const useWeb3Provider = () => {
     localStorage.removeItem("isAuthenticated");
     notification.info({ message: "Cartera desconectada" });
   };
-
-  useEffect(() => {
-    if (window == null) return;
-
-    if (localStorage.hasOwnProperty("isAuthenticated")) {
-      connectWallet();
-    }
-  }, [connectWallet, state.isAuthenticated]);
-
-  useEffect(() => {
-    if (typeof window.ethereum === "undefined") return;
-
-    window.ethereum.on("accountsChanged", (accounts: string[]) => {
-      setState({ ...state, address: accounts[0] });
-    });
-
-    window.ethereum.on("networkChanged", (network: string) => {
-      setState({ ...state, currentChain: Number(network)});
-    });
-
-    return () => {
-      window.ethereum.removeAllListeners();
-    };
-  }, [state]);
 
   return {
     connectWallet,

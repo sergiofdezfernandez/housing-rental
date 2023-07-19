@@ -37,7 +37,6 @@ const RegisterPropertyForm: React.FC = () => {
       });
     } catch (error: any) {
       notification.error({ message: error.code, description: error.reason });
-      console.log(error);
     }
   }
 
