@@ -1,34 +1,26 @@
-import {
-  Button,
-  Form,
-  Input,
-  InputNumber,
-  notification,
-  Col,
-  Row,
-  Card,
-} from "antd";
+import { Button, Form, Input, notification, Card, Tooltip } from "antd";
 import Title from "antd/es/typography/Title";
-import { AnyARecord } from "dns";
 import React from "react";
 import { IWeb3Context, useWeb3Context } from "../web3/Web3Context";
-import { JsonRpcError } from "ethers";
+import { useSearchParams } from "next/navigation";
 
 const RentPropertyForm: React.FC = () => {
   const {
-    state: { contract },
+    state: { contract, address },
   } = useWeb3Context() as IWeb3Context;
+
+  const searchParams = useSearchParams();
 
   async function onFinish(values: any) {
     try {
       const tx = await contract.rentProperty(
         {
-          id: values.tenantAddress,
+          id: address,
           name: values.tenantName,
           phoneNumber: values.tenantPhone,
           email: values.tenantEmail,
         },
-        values.propertyId,
+        searchParams.get("propertyId"),
         values.duration,
         values.deposit
       );
@@ -60,31 +52,20 @@ const RentPropertyForm: React.FC = () => {
         actions={[
           <Form.Item key={"submit"}>
             <Button type="default" htmlType="submit">
-              Submit
+              Aceptar
             </Button>
           </Form.Item>,
         ]}
       >
         <Form.Item
-          label="tenantAddress"
-          name="tenantAddress"
-          rules={[
-            { required: true, message: "Please enter your tenant address" },
-          ]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          label="tenantName"
+          label="Nombre"
           name="tenantName"
-          rules={[
-            { required: true, message: "Please enter your tenant name" },
-          ]}
+          rules={[{ required: true, message: "Please enter your tenant name" }]}
         >
           <Input />
         </Form.Item>
         <Form.Item
-          label="tenantPhone"
+          label="Teléfono"
           name="tenantPhone"
           rules={[
             { required: true, message: "Please enter your tenant phone" },
@@ -93,41 +74,41 @@ const RentPropertyForm: React.FC = () => {
           <Input />
         </Form.Item>
         <Form.Item
-          label="tenantEmail"
+          label="Correo electrónico"
           name="tenantEmail"
           rules={[
             { required: true, message: "Please enter your tenant email" },
+            {
+              message: "El email debe estar en un formato correcto",
+              pattern: RegExp('[a-z0-9]+@[a-z]+\.[a-z]{2,3}'),
+            },
           ]}
         >
           <Input />
         </Form.Item>
         <Form.Item
-          label="propertyId"
-          name="propertyId"
-          rules={[
-            { required: true, message: "Please enter the property id" },
-          ]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          label="duration"
+          label="Duración"
           name="duration"
           rules={[
             { required: true, message: "Please enter the lease duration" },
           ]}
         >
-          <Input type="number"/>
+          <Input type="number" />
         </Form.Item>
-        <Form.Item
-          label="deposit"
-          name="deposit"
-          rules={[
-            { required: true, message: "Please enter the property security deposit" },
-          ]}
-        >
-          <Input type="number"/>
-        </Form.Item>
+        <Tooltip title="Depósito de seguridad marcado por el arrendador">
+          <Form.Item
+            label="Depósito de seguridad"
+            name="deposit"
+            initialValue={searchParams.get("securityDeposit")}
+            rules={[
+              {
+                message: "Please enter the property security deposit",
+              },
+            ]}
+          >
+            <Input type="number" disabled />
+          </Form.Item>
+        </Tooltip>
       </Card>
     </Form>
   );

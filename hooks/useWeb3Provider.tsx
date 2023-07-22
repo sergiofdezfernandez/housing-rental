@@ -2,6 +2,8 @@ import { message, notification } from "antd";
 import { BrowserProvider, ethers, JsonRpcSigner, Contract } from "ethers";
 import { useCallback, useEffect, useState } from "react";
 import HousingRentalSystemContract from "../contracts/HousingRentalSystem.json";
+import { useRouter } from "next/router";
+import { url } from "inspector";
 
 declare var window: any;
 
@@ -16,6 +18,8 @@ export interface IWeb3State {
 }
 
 const useWeb3Provider = () => {
+  const router = useRouter();
+
   const initialWeb3State = {
     address: null,
     currentChain: null,
@@ -76,6 +80,7 @@ const useWeb3Provider = () => {
     setState(initialWeb3State);
     localStorage.removeItem("isAuthenticated");
     notification.info({ message: "Cartera desconectada" });
+    router.push("/");
   };
 
   return {
