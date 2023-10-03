@@ -1,12 +1,10 @@
 import Icon, { HomeOutlined, WalletFilled } from "@ant-design/icons";
 import { CustomIconComponentProps } from "@ant-design/icons/lib/components/Icon";
-import { Button, Menu, MenuProps, theme } from "antd";
+import { Menu, theme } from "antd";
 import Sider from "antd/es/layout/Sider";
 import Layout, { Header, Content, Footer } from "antd/es/layout/layout";
 import Link from "next/link";
 import { useWeb3Context, IWeb3Context } from "./web3/Web3Context";
-import { Wallet } from "ethers";
-import { disconnect } from "process";
 
 type LayoutProps = {
   children: React.ReactNode;
@@ -70,6 +68,10 @@ export default function AppLayout({ children }: LayoutProps) {
               <Menu.Item key={3}>
                 <span>Registrar propiedad</span>
                 <Link href={"/registerProperty"}></Link>
+              </Menu.Item>
+              <Menu.Item key={5}>
+                <span>Propuestas de contrato</span>
+                <Link href={"/rentProposals"}></Link>
               </Menu.Item>
               <Menu.Item key={4} onClick={disconnect} danger={true}>
                 <LogOutIcon></LogOutIcon>
