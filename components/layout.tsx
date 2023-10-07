@@ -1,10 +1,11 @@
-import Icon, { HomeOutlined, WalletFilled } from "@ant-design/icons";
+import Icon, { BgColorsOutlined, HomeOutlined, WalletFilled } from "@ant-design/icons";
 import { CustomIconComponentProps } from "@ant-design/icons/lib/components/Icon";
-import { Menu, theme } from "antd";
+import { Menu, Typography, theme } from "antd";
 import Sider from "antd/es/layout/Sider";
 import Layout, { Header, Content, Footer } from "antd/es/layout/layout";
 import Link from "next/link";
 import { useWeb3Context, IWeb3Context } from "./web3/Web3Context";
+import Title from "antd/es/typography/Title";
 
 type LayoutProps = {
   children: React.ReactNode;
@@ -44,7 +45,7 @@ export default function AppLayout({ children }: LayoutProps) {
   const {
     connectWallet,
     disconnect,
-    state: { isAuthenticated },
+    state: { isAuthenticated,accountBalance  },
   } = useWeb3Context() as IWeb3Context;
 
   return (
@@ -82,8 +83,14 @@ export default function AppLayout({ children }: LayoutProps) {
         </Menu>
       </Sider>
       <Layout>
-        <Header style={{ padding: 0, background: colorBgContainer }}></Header>
-        <Content style={{ margin: "0 16px" }}>
+        <Header style={{display:'flex', backgroundColor:colorBgContainer}}>
+        <div className="logo" />
+        <div style={{ flex: 1 }}></div>
+        <div style={{color:'white'}}>
+          <Typography.Text strong={true}>Balance de la cuenta: <span>{parseFloat(accountBalance!).toFixed(3)}</span><sub>ETH</sub></Typography.Text>
+        </div>
+        </Header>            
+        <Content style={{ margin: "1em" }}>
           <main>{children}</main>
         </Content>
         <Footer>

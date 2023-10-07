@@ -13,6 +13,7 @@ import { AnyARecord } from "dns";
 import React from "react";
 import { IWeb3Context, useWeb3Context } from "../web3/Web3Context";
 import { JsonRpcError } from "ethers";
+import handleError from "./shared/error_handler";
 
 const RegisterPropertyForm: React.FC = () => {
   const {
@@ -36,7 +37,7 @@ const RegisterPropertyForm: React.FC = () => {
         description: "Propiedad registrada correctamente",
       });
     } catch (error: any) {
-      notification.error({ message: error.code, description: error.reason });
+      handleError(error.info.error)
     }
   }
 

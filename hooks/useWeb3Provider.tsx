@@ -1,14 +1,14 @@
-import { message, notification } from "antd";
+import { notification } from "antd";
 import { BrowserProvider, ethers, JsonRpcSigner, Contract } from "ethers";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import HousingRentalSystemContract from "../contracts/HousingRentalSystem.json";
 import { useRouter } from "next/router";
-import { url } from "inspector";
 
 declare var window: any;
 
 export interface IWeb3State {
   address: string | null;
+  accountBalance:string | null;
   currentChain: number | null;
   signer: JsonRpcSigner | null;
   provider: BrowserProvider | null;
@@ -28,6 +28,7 @@ const useWeb3Provider = () => {
     isAuthenticated: false,
     contract: null,
     ethereum: undefined,
+    accountBalance:null
   };
   const [state, setState] = useState<IWeb3State>(initialWeb3State);
 
@@ -45,6 +46,7 @@ const useWeb3Provider = () => {
       }
       const provider = new ethers.BrowserProvider(ethereum);
       const accounts: string[] = await provider.send("eth_requestAccounts", []);
+      const accountBalance: string = ethers.formatEther(await provider.send("eth_getBalance",[accounts[0]]));
 
       if (accounts.length > 0) {
         const signer = await provider.getSigner();
@@ -57,6 +59,7 @@ const useWeb3Provider = () => {
           ...state,
           address: accounts[0],
           signer,
+          accountBalance,
           currentChain: chain,
           provider,
           isAuthenticated: true,
@@ -73,7 +76,9 @@ const useWeb3Provider = () => {
           description: accounts[0],
         });
       }
-    } catch {}
+    } catch {
+
+    }
   }, [state]);
 
   const disconnect = () => {

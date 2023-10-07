@@ -3,6 +3,7 @@ import Title from "antd/es/typography/Title";
 import React from "react";
 import { IWeb3Context, useWeb3Context } from "../web3/Web3Context";
 import { useSearchParams } from "next/navigation";
+import handleError from "./shared/error_handler";
 
 const RentPropertyForm: React.FC = () => {
   const {
@@ -30,7 +31,7 @@ const RentPropertyForm: React.FC = () => {
         description: "Propuesta enviada correctamente",
       });
     } catch (error: any) {
-      notification.error({ message: error.code, description: error.reason });
+      handleError(error.info.error)
     }
   }
 
