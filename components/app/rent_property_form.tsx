@@ -21,9 +21,12 @@ const RentPropertyForm: React.FC = () => {
           phoneNumber: values.tenantPhone,
           email: values.tenantEmail,
         },
-        searchParams.get("propertyId"),
+        Number(searchParams.get("propertyId")!),
         values.duration,
-        values.deposit
+        values.deposit,
+        {
+          value: Number(searchParams.get('price')!),
+        }
       );
       await tx.wait();
       notification.success({

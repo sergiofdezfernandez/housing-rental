@@ -1,11 +1,10 @@
-import Icon, { BgColorsOutlined, HomeOutlined, WalletFilled } from "@ant-design/icons";
+import Icon, {HomeOutlined, WalletFilled } from "@ant-design/icons";
 import { CustomIconComponentProps } from "@ant-design/icons/lib/components/Icon";
 import { Menu, Typography, theme } from "antd";
 import Sider from "antd/es/layout/Sider";
 import Layout, { Header, Content, Footer } from "antd/es/layout/layout";
 import Link from "next/link";
 import { useWeb3Context, IWeb3Context } from "./web3/Web3Context";
-import Title from "antd/es/typography/Title";
 
 type LayoutProps = {
   children: React.ReactNode;
@@ -86,9 +85,9 @@ export default function AppLayout({ children }: LayoutProps) {
         <Header style={{display:'flex', backgroundColor:colorBgContainer}}>
         <div className="logo" />
         <div style={{ flex: 1 }}></div>
-        <div style={{color:'white'}}>
+        {isAuthenticated ? (        <div>
           <Typography.Text strong={true}>Balance de la cuenta: <span>{parseFloat(accountBalance!).toFixed(3)}</span><sub>ETH</sub></Typography.Text>
-        </div>
+        </div>):<></>}
         </Header>            
         <Content style={{ margin: "1em" }}>
           <main>{children}</main>

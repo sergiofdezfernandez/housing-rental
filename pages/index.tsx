@@ -1,17 +1,14 @@
 import React, { useState } from "react";
 import { IWeb3Context, useWeb3Context } from "../components/web3/Web3Context";
 import { useEffect } from "react";
-import { Property } from "../components/model/Property";
+import { Property } from "../components/model/domain_model";
 import Image from "next/image";
-import Icon, {
-  SettingOutlined,
+import{
   EditOutlined,
-  EllipsisOutlined,
 } from "@ant-design/icons";
-import { Switch, Card, Avatar, Skeleton, Tooltip, Row, Col } from "antd";
+import {Card, Tooltip, Row, Col } from "antd";
 import Meta from "antd/es/card/Meta";
 import Link from "next/link";
-import { CustomIconComponentProps } from "@ant-design/icons/lib/components/Icon";
 
 const App: React.FC = () => {
   const {
@@ -48,6 +45,7 @@ const App: React.FC = () => {
                     query: {
                       propertyId: p.id.toString(),
                       securityDeposit: p.securityDeposit.toString(),
+                      price:p.price.toString()
                     },
                   }}
                 >
