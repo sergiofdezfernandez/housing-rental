@@ -6,4 +6,9 @@ const withTM = require('next-transpile-modules')(["antd",
   "rc-util",
   "rc-tree",
   "rc-tooltip"]);
-module.exports = withTM({})
+  
+module.exports = withTM({
+  env:{
+    address:"0xf6E1EDc5926888D66202d712c9529489dD8EF185"
+  }
+})

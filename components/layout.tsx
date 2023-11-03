@@ -53,11 +53,11 @@ export default function AppLayout({ children }: LayoutProps) {
         <Menu theme="dark" mode="inline">
           {!isAuthenticated ? (
             <Menu.ItemGroup>
-              <Menu.Item key={1} onClick={connectWallet}>
-                <WalletFilled></WalletFilled>
-                <span>Conectar cartera</span>
-              </Menu.Item>
-            </Menu.ItemGroup>
+            <Menu.Item key={0}>
+              <Link href={'/signup'}></Link>  
+              <span>Registrarse</span>
+            </Menu.Item>
+          </Menu.ItemGroup>
           ) : (
             <Menu.ItemGroup>
               <Menu.Item key={2}>
@@ -72,7 +72,13 @@ export default function AppLayout({ children }: LayoutProps) {
               <Menu.Item key={5}>
                 <span>Propuestas de contrato</span>
                 <Link href={"/rentProposals"}></Link>
+              </Menu.Item>´
+              <Menu.ItemGroup>
+              <Menu.Item key={1} onClick={connectWallet}>
+                <WalletFilled></WalletFilled>
+                <span>Conectar cartera</span>
               </Menu.Item>
+            </Menu.ItemGroup>
               <Menu.Item key={4} onClick={disconnect} danger={true}>
                 <LogOutIcon></LogOutIcon>
                 <span>Desconectar cartera</span>

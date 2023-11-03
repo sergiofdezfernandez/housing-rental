@@ -1,11 +1,14 @@
 import { notification } from "antd";
-import { BrowserProvider, ethers, JsonRpcSigner, Contract } from "ethers";
+import { BrowserProvider, ethers, JsonRpcSigner, Contract, Eip1193Provider } from "ethers";
 import { useCallback, useState } from "react";
 import HousingRentalSystemContract from "../contracts/HousingRentalSystem.json";
 import { useRouter } from "next/router";
 
-declare var window: any;
-
+declare global {
+  interface Window{
+    ethereum:Eip1193Provider
+  }
+}
 export interface IWeb3State {
   address: string | null;
   accountBalance:string | null;
@@ -33,28 +36,21 @@ const useWeb3Provider = () => {
   const [state, setState] = useState<IWeb3State>(initialWeb3State);
 
   const connectWallet = useCallback(async () => {
-    const { ethereum } = window;
-    if (
-      state.isAuthenticated ||
-      typeof window === undefined ||
-      window.ethereum === undefined
-    )
+    if (state.isAuthenticated)
       return;
-    try {
+    
+      const {ethereum} = window;
+
       if (!ethereum) {
-        notification.error({ message: "No tienes instalado metamask" });
+        notification.error({ message: "No se ha encontrado una wallet de ethereum" });
       }
       const provider = new ethers.BrowserProvider(ethereum);
       const accounts: string[] = await provider.send("eth_requestAccounts", []);
-      const accountBalance: string = ethers.formatEther(await provider.send("eth_getBalance",[accounts[0]]));
-
       if (accounts.length > 0) {
         const signer = await provider.getSigner();
-        const chain = Number(await (await provider.getNetwork()).chainId);
-        if (chain !== 97) {
-          notification.error({ message: "Cambie la red a binanceTestNet" });
-          return;
-        }
+        const chain:number = Number(await (await provider.getNetwork()).chainId);
+        const accountBalance: string = ethers.formatEther(await provider.send("eth_getBalance",[accounts[0]]));
+
         setState({
           ...state,
           address: accounts[0],
@@ -64,7 +60,7 @@ const useWeb3Provider = () => {
           provider,
           isAuthenticated: true,
           contract: new Contract(
-            HousingRentalSystemContract.networks[chain].address,
+            process.env.address!,
             HousingRentalSystemContract.abi,
             signer
           ),
@@ -76,9 +72,7 @@ const useWeb3Provider = () => {
           description: accounts[0],
         });
       }
-    } catch {
-
-    }
+    
   }, [state]);
 
   const disconnect = () => {

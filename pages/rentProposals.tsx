@@ -22,7 +22,6 @@ const App: React.FC = () => {
       const leaseAgreements: Array<LeaseAgreement> =
         await contract.getRegisteredLeaseAgreement();
       setLeaseAgreements(leaseAgreements);
-      console.log(leaseAgreements)
       setLoading(false);
     };
     if (contract && isAuthenticated) {

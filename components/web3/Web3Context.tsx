@@ -23,9 +23,10 @@ const Web3ContextProvider: FC<Props> = ({ children }) => {
       state.ethereum?.removeListener("accountsChanged", handleAccountChanged);
     };
   });
+
   function handleAccountChanged(accounts: any) {
     if (accounts.length === 0) {
-      notification.info({ message: "Por favor conecta con MetaMask" });
+      notification.info({ message: "No existen cuentas" });
     } else if (accounts[0] !== state.address) {
       notification.success({
         message: "La cuenta de la cartera ha sido cambiada",
