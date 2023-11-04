@@ -9,6 +9,7 @@ import{
 import {Card, Tooltip, Row, Col } from "antd";
 import Meta from "antd/es/card/Meta";
 import Link from "next/link";
+import { withAuth } from '../components/auth/auth';
 
 const App: React.FC = () => {
   const {
@@ -80,4 +81,4 @@ const App: React.FC = () => {
   );
 };
 
-export default App;
+export default withAuth(App);

@@ -5,18 +5,20 @@ import { UserOutlined } from '@ant-design/icons';
 import { handleSignUpError } from '../components/app/shared/error_handler';
 import { SignUpModel } from '../components/model/forms_models';
 import Title from 'antd/es/typography/Title';
+import { useRouter } from 'next/router';
 
 export default function SignUp() {
     const [form] = Form.useForm()
+    const router = useRouter();
+
     const updateRole = async (userId:string, role:string) => {
         const { data, error } = await supabase
             .from('user_roles')
             .insert({ id:userId,role_name: role })
         if (error) {
             console.error('Error updating role:', error);
-        } else {
-            console.log('Role updated:', data);
         }
+        router.push("/dashboard")
     };
 
     async function onFinish(values: SignUpModel) {
@@ -27,6 +29,7 @@ export default function SignUp() {
             return;
         }
         await updateRole(data.user?.id!, values.role);
+
         notification.success({message:`Se ha registrado ${data.user?.email} correctamente`})
         } catch (error) {
         console.error('Sign up error', error);
@@ -63,7 +66,6 @@ export default function SignUp() {
           </Form.Item>
         <Form.Item label="role" name="role" >
         <Select
-          defaultValue="TENANT"
           options={[
             {value:'TENANT',label:'Arrendatario'},
             {value: 'LANDLORD',label:'Arrendador'}
