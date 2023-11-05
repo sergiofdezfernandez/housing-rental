@@ -1,25 +1,19 @@
-import { AuthApiError, AuthError } from "@supabase/supabase-js";
+import { type AuthError } from "@supabase/supabase-js";
 import notification from "antd/es/notification";
+import { RpcError } from "../../model/domain_model";
+import { ApiError } from "next/dist/server/api-utils";
 
-interface RpcError {
-    code: string
-    data: {
-        code: number
-        data: string
-        message: string
-    }
-    message: string
+export function handleError(rpcError: RpcError): void {
+  notification.error({
+    message: rpcError.message,
+    description: rpcError.data.message,
+  });
 }
 
-export function handleError(rpcError: RpcError) {
-    notification.error({ message: rpcError.message, description: rpcError.data.message });
+export function handleAuthError(error: AuthError): void {
+  notification.error({ message: error.name, description: error.message });
 }
 
-export function handleSignUpError(error: AuthError) {
-    notification.error({ message: error.name, description: error.message })
+export function handleApiError(error: ApiError): void {
+  notification.error({ message: error.name, description: error.message });
 }
-
-export function handleInsertDataError(error:any){
-    notification.error({ message: error.name, description: error.message })
-}
-

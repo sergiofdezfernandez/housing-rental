@@ -3,13 +3,11 @@ import { IWeb3Context, useWeb3Context } from "../components/web3/Web3Context";
 import { useEffect } from "react";
 import { Property } from "../components/model/domain_model";
 import Image from "next/image";
-import{
-  EditOutlined,
-} from "@ant-design/icons";
-import {Card, Tooltip, Row, Col } from "antd";
+import { EditOutlined } from "@ant-design/icons";
+import { Card, Tooltip, Row, Col } from "antd";
 import Meta from "antd/es/card/Meta";
 import Link from "next/link";
-import { withAuth } from '../components/auth/auth';
+import { withAuth } from "../components/auth/auth";
 
 const App: React.FC = () => {
   const {
@@ -21,7 +19,7 @@ const App: React.FC = () => {
   useEffect(() => {
     const getProperties = async () => {
       const properties: Array<Property> =
-        await contract.getRegisteredProperties();
+        await contract!.getRegisteredProperties();
       setProperties(properties);
       setLoading(false);
     };
@@ -46,7 +44,7 @@ const App: React.FC = () => {
                     query: {
                       propertyId: p.id.toString(),
                       securityDeposit: p.securityDeposit.toString(),
-                      price:p.price.toString()
+                      price: p.price.toString(),
                     },
                   }}
                 >

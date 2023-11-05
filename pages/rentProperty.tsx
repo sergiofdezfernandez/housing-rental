@@ -1,12 +1,10 @@
-import React from 'react'
-import RentPropertyForm from '../components/app/rent_property_form';
+import React from "react";
+import RentPropertyForm from "../components/app/rent_property_form";
 
 class RentProperty extends React.Component {
-    render() {
-        return (
-            <RentPropertyForm></RentPropertyForm>
-        )
-    }
+  render() {
+    return <RentPropertyForm></RentPropertyForm>;
+  }
 }
 
 export default RentProperty;

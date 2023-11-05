@@ -1,26 +1,22 @@
 import React, { useState } from "react";
 import { IWeb3Context, useWeb3Context } from "../components/web3/Web3Context";
 import { useEffect } from "react";
-import { LeaseAgreement, Property } from "../components/model/domain_model";
-import Image from "next/image";
-import{
-  EditOutlined,
-} from "@ant-design/icons";
-import {Card, Tooltip, Row, Col } from "antd";
+import { LeaseAgreement } from "../components/model/domain_model";
+import { Card, Tooltip, Row, Col } from "antd";
 import Meta from "antd/es/card/Meta";
-import Link from "next/link";
 
 const App: React.FC = () => {
   const {
     state: { contract, isAuthenticated },
   } = useWeb3Context() as IWeb3Context;
-  const [leaseAgreements, setLeaseAgreements] = useState<Array<LeaseAgreement> | null>([]);
+  const [leaseAgreements, setLeaseAgreements] =
+    useState<Array<LeaseAgreement> | null>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const getLeaseAgreements = async () => {
       const leaseAgreements: Array<LeaseAgreement> =
-        await contract.getRegisteredLeaseAgreement();
+        await contract!.getRegisteredLeaseAgreement();
       setLeaseAgreements(leaseAgreements);
       setLoading(false);
     };
@@ -37,10 +33,7 @@ const App: React.FC = () => {
         <Col span={6} key={la.id} xs={24} md={6}>
           <Card
             loading={loading}
-            actions={[
-              <Tooltip title="Alquilar" key="edit">
-              </Tooltip>,
-            ]}
+            actions={[<Tooltip title="Alquilar" key="edit"></Tooltip>]}
           >
             <Meta
               avatar={"Id: " + la.id.toString()}

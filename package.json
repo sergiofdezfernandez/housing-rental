@@ -6,7 +6,13 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "prepare": "husky install",
+    "check-types": "tsc --pretty --noEmit",
+    "check-format": "prettier --check .",
+    "check-lint": "eslint . --ext ts --ext tsx --ext js",
+    "format": "prettier --write .",
+    "test-all": "npm run check-format && npm run check-lint && npm run check-types && npm run build"
   },
   "dependencies": {
     "@ant-design/icons": "^5.1.4",
@@ -19,8 +25,8 @@
     "@web3-react/core": "^8.2.0",
     "@web3-react/injected-connector": "^6.0.7",
     "antd": "^5.5.2",
-    "eslint": "8.40.0",
-    "eslint-config-next": "13.4.2",
+    "eslint-config-next": "^14.0.1",
+    "eslint-config-standard-with-typescript": "^39.1.1",
     "ethers": "^6.3.0",
     "framer-motion": "^10.12.10",
     "next": "14.0.1",
@@ -30,6 +36,12 @@
     "react-icons": "^4.8.0",
     "react-intl": "^6.5.1",
     "typescript": "5.0.4",
-    "web3": "^1.10.0"
+    "web3": "^4.2.2"
+  },
+  "devDependencies": {
+    "eslint": "^8.53.0",
+    "eslint-config-prettier": "^9.0.0",
+    "husky": "^8.0.0",
+    "prettier": "3.0.3"
   }
 }

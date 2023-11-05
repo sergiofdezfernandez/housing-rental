@@ -1,28 +1,20 @@
-import {
-  Button,
-  Form,
-  Input,
-  InputNumber,
-  notification,
-  Col,
-  Row,
-  Card,
-} from "antd";
+import { Button, Form, Input, InputNumber, notification, Card } from "antd";
 import Title from "antd/es/typography/Title";
-import { AnyARecord } from "dns";
 import React from "react";
-import { IWeb3Context, useWeb3Context } from "../web3/Web3Context";
-import { JsonRpcError } from "ethers";
-import handleError from "./shared/error_handler";
+import type { IWeb3Context } from "../web3/Web3Context";
+import { useWeb3Context } from "../web3/Web3Context";
+import { handleError } from "./shared/error_handler";
+import { RegisterPropertyFormModel } from "../model/forms_models";
+import { RpcError } from "../model/domain_model";
 
 const RegisterPropertyForm: React.FC = () => {
   const {
     state: { contract },
   } = useWeb3Context() as IWeb3Context;
 
-  async function onFinish(values: any) {
+  async function onFinish(values: RegisterPropertyFormModel) {
     try {
-      const tx = await contract.registerProperty(
+      const tx = await contract!.registerProperty(
         values.postalAddress,
         values.description,
         values.price,
@@ -36,33 +28,31 @@ const RegisterPropertyForm: React.FC = () => {
         message: "Registro de propiedad",
         description: "Propiedad registrada correctamente",
       });
-    } catch (error: any) {
-      handleError(error.info.error)
+    } catch (error: unknown) {
+      if (error instanceof RpcError) {
+        handleError(error);
+      }
     }
   }
 
-  function onFinishFailed(errorInfo: any) {
-    console.log("Failed:", errorInfo);
-  }
   return (
     <Form
       name="basic"
       labelCol={{ span: 4 }}
       initialValues={{ remember: true }}
       onFinish={onFinish}
-      onFinishFailed={onFinishFailed}
       autoComplete="off"
     >
       <Title level={2}>Registrar propiedad</Title>
       <Card
         bordered={false}
-        actions={
-          [<Form.Item key={"submit"}>
+        actions={[
+          <Form.Item key={"submit"}>
             <Button type="default" htmlType="submit">
               Submit
             </Button>
-          </Form.Item>]
-        }
+          </Form.Item>,
+        ]}
       >
         <Form.Item
           label="postalAddress"

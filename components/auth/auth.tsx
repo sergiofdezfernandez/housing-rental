@@ -1,22 +1,26 @@
-import { useRouter } from 'next/router';
-import { useEffect, ReactElement } from 'react';
-import { supabase } from '../../lib/supabase';
+import { useRouter } from "next/router";
+import { useEffect } from "react";
+import { supabase } from "../../lib/supabase";
 
 interface AuthProps {
   isAuthenticated: boolean;
 }
 
-export const withAuth = (WrappedComponent: React.FC<AuthProps>) => {
+export const withAuth = (
+  WrappedComponent: React.FC<AuthProps>
+): React.FC<AuthProps> => {
   const Auth: React.FC<AuthProps> = (props) => {
     const router = useRouter();
 
     useEffect(() => {
-      supabase.auth.getUser().then(user =>{
-        if(!user && !props.isAuthenticated){
-          router.push('/login')
+      const getUserProfile = async (): Promise<void> => {
+        const { data } = await supabase.auth.getUser();
+        if (data.user == null && !props.isAuthenticated) {
+          router.push("/login");
         }
-      })
-    }, [props.isAuthenticated,router]);
+      };
+      void getUserProfile();
+    }, [props.isAuthenticated, router]);
 
     if (!props.isAuthenticated) {
       return null;

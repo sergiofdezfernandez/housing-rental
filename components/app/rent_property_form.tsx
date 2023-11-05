@@ -1,9 +1,12 @@
 import { Button, Form, Input, notification, Card, Tooltip } from "antd";
 import Title from "antd/es/typography/Title";
 import React from "react";
-import { IWeb3Context, useWeb3Context } from "../web3/Web3Context";
+import type { IWeb3Context } from "../web3/Web3Context";
+import { useWeb3Context } from "../web3/Web3Context";
 import { useSearchParams } from "next/navigation";
-import handleError from "./shared/error_handler";
+import { handleError } from "./shared/error_handler";
+import { RpcError } from "../model/domain_model";
+import { RentPropertyFormModel } from "../model/forms_models";
 
 const RentPropertyForm: React.FC = () => {
   const {
@@ -12,20 +15,20 @@ const RentPropertyForm: React.FC = () => {
 
   const searchParams = useSearchParams();
 
-  async function onFinish(values: any) {
+  async function onFinish(values: RentPropertyFormModel) {
     try {
-      const tx = await contract.rentProperty(
+      const tx = await contract!.rentProperty(
         {
           id: address,
-          name: values.tenantName,
-          phoneNumber: values.tenantPhone,
-          email: values.tenantEmail,
+          name: values.name,
+          phoneNumber: values.phoneNumber,
+          email: values.email,
         },
         Number(searchParams.get("propertyId")!),
         values.duration,
         values.deposit,
         {
-          value: Number(searchParams.get('price')!),
+          value: Number(searchParams.get("price")!),
         }
       );
       await tx.wait();
@@ -33,13 +36,11 @@ const RentPropertyForm: React.FC = () => {
         message: "Propuesta de alquiler de propiedad enviada",
         description: "Propuesta enviada correctamente",
       });
-    } catch (error: any) {
-      handleError(error.info.error)
+    } catch (error: unknown) {
+      if (error instanceof RpcError) {
+        handleError(error);
+      }
     }
-  }
-
-  function onFinishFailed(errorInfo: any) {
-    console.log("Failed:", errorInfo);
   }
   return (
     <Form
@@ -47,7 +48,6 @@ const RentPropertyForm: React.FC = () => {
       labelCol={{ span: 4 }}
       initialValues={{ remember: true }}
       onFinish={onFinish}
-      onFinishFailed={onFinishFailed}
       autoComplete="off"
     >
       <Title level={2}>Alquilar propiedad</Title>
@@ -84,7 +84,7 @@ const RentPropertyForm: React.FC = () => {
             { required: true, message: "Please enter your tenant email" },
             {
               message: "El email debe estar en un formato correcto",
-              pattern: RegExp('[a-z0-9]+@[a-z]+\.[a-z]{2,3}'),
+              pattern: RegExp("[a-z0-9]+@[a-z]+.[a-z]{2,3}"),
             },
           ]}
         >
