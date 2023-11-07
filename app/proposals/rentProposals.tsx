@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { IWeb3Context, useWeb3Context } from '../../../components/web3/Web3Context';
+import { IWeb3Context, useWeb3Context } from '../../components/web3/Web3Context';
 import { useEffect } from 'react';
-import { LeaseAgreement } from '../../../components/model/domain_model';
+import { LeaseAgreement } from '../../components/model/domain_model';
 import { Card, Tooltip, Row, Col } from 'antd';
 import Meta from 'antd/es/card/Meta';
 

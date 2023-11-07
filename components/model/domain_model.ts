@@ -1,4 +1,4 @@
-import { Eip1193Provider } from 'ethers/types/providers';
+import { Eip1193Provider } from 'ethers';
 
 export interface Property {
   id: number;

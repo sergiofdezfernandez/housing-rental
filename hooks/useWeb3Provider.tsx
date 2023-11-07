@@ -2,7 +2,7 @@ import { notification } from 'antd';
 import { BrowserProvider, ethers, JsonRpcSigner, Contract, Eip1193Provider } from 'ethers';
 import { useCallback, useState } from 'react';
 import HousingRentalSystemContract from '../contracts/HousingRentalSystem.json';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 declare global {
   interface Window {
