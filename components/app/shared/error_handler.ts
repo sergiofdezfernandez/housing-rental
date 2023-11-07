@@ -1,7 +1,7 @@
-import { type AuthError } from "@supabase/supabase-js";
-import notification from "antd/es/notification";
-import { RpcError } from "../../model/domain_model";
-import { ApiError } from "next/dist/server/api-utils";
+import { type AuthError } from '@supabase/supabase-js';
+import notification from 'antd/es/notification';
+import { RpcError } from '../../model/domain_model';
+import { ApiError } from 'next/dist/server/api-utils';
 
 export function handleError(rpcError: RpcError): void {
   notification.error({

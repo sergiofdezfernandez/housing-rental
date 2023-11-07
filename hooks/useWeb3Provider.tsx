@@ -1,14 +1,8 @@
-import { notification } from "antd";
-import {
-  BrowserProvider,
-  ethers,
-  JsonRpcSigner,
-  Contract,
-  Eip1193Provider,
-} from "ethers";
-import { useCallback, useState } from "react";
-import HousingRentalSystemContract from "../contracts/HousingRentalSystem.json";
-import { useRouter } from "next/router";
+import { notification } from 'antd';
+import { BrowserProvider, ethers, JsonRpcSigner, Contract, Eip1193Provider } from 'ethers';
+import { useCallback, useState } from 'react';
+import HousingRentalSystemContract from '../contracts/HousingRentalSystem.json';
+import { useRouter } from 'next/router';
 
 declare global {
   interface Window {
@@ -48,16 +42,16 @@ const useWeb3Provider = () => {
 
     if (!ethereum) {
       notification.error({
-        message: "No se ha encontrado una wallet de ethereum",
+        message: 'No se ha encontrado una wallet de ethereum',
       });
     }
     const provider = new ethers.BrowserProvider(ethereum);
-    const accounts: string[] = await provider.send("eth_requestAccounts", []);
+    const accounts: string[] = await provider.send('eth_requestAccounts', []);
     if (accounts.length > 0) {
       const signer = await provider.getSigner();
       const chain: number = Number(await (await provider.getNetwork()).chainId);
       const accountBalance: string = ethers.formatEther(
-        await provider.send("eth_getBalance", [accounts[0]])
+        await provider.send('eth_getBalance', [accounts[0]])
       );
 
       setState({
@@ -68,16 +62,12 @@ const useWeb3Provider = () => {
         currentChain: chain,
         provider,
         isAuthenticated: true,
-        contract: new Contract(
-          process.env.address!,
-          HousingRentalSystemContract.abi,
-          signer
-        ),
+        contract: new Contract(process.env.address!, HousingRentalSystemContract.abi, signer),
         ethereum: ethereum,
       });
-      localStorage.setItem("isAuthenticated", "true");
+      localStorage.setItem('isAuthenticated', 'true');
       notification.success({
-        message: "Cartera conectada con éxito en la cuenta",
+        message: 'Cartera conectada con éxito en la cuenta',
         description: accounts[0],
       });
     }
@@ -85,9 +75,9 @@ const useWeb3Provider = () => {
 
   const disconnect = () => {
     setState(initialWeb3State);
-    localStorage.removeItem("isAuthenticated");
-    notification.info({ message: "Cartera desconectada" });
-    router.push("/");
+    localStorage.removeItem('isAuthenticated');
+    notification.info({ message: 'Cartera desconectada' });
+    router.push('/');
   };
 
   return {

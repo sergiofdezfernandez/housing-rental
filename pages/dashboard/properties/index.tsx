@@ -1,13 +1,12 @@
-import React, { useState } from "react";
-import { IWeb3Context, useWeb3Context } from "../components/web3/Web3Context";
-import { useEffect } from "react";
-import { Property } from "../components/model/domain_model";
-import Image from "next/image";
-import { EditOutlined } from "@ant-design/icons";
-import { Card, Tooltip, Row, Col } from "antd";
-import Meta from "antd/es/card/Meta";
-import Link from "next/link";
-import { withAuth } from "../components/auth/auth";
+import React, { useState } from 'react';
+import { IWeb3Context, useWeb3Context } from '../../../components/web3/Web3Context';
+import { useEffect } from 'react';
+import { Property } from '../../../components/model/domain_model';
+import Image from 'next/image';
+import { EditOutlined } from '@ant-design/icons';
+import { Card, Tooltip, Row, Col } from 'antd';
+import Meta from 'antd/es/card/Meta';
+import Link from 'next/link';
 
 const App: React.FC = () => {
   const {
@@ -18,8 +17,7 @@ const App: React.FC = () => {
 
   useEffect(() => {
     const getProperties = async () => {
-      const properties: Array<Property> =
-        await contract!.getRegisteredProperties();
+      const properties: Array<Property> = await contract!.getRegisteredProperties();
       setProperties(properties);
       setLoading(false);
     };
@@ -40,7 +38,7 @@ const App: React.FC = () => {
               <Tooltip title="Alquilar" key="edit">
                 <Link
                   href={{
-                    pathname: "/rentProperty",
+                    pathname: '/rentProperty',
                     query: {
                       propertyId: p.id.toString(),
                       securityDeposit: p.securityDeposit.toString(),
@@ -52,18 +50,11 @@ const App: React.FC = () => {
                 </Link>
               </Tooltip>,
             ]}
-            cover={
-              <Image
-                alt="example"
-                src="static/images/house.svg"
-                width={200}
-                height={200}
-              ></Image>
-            }
+            cover={<Image alt="example" src="house.svg" width={200} height={200}></Image>}
           >
             <Meta
-              avatar={"Id: " + p.id.toString()}
-              title={p.price + "€"}
+              avatar={'Id: ' + p.id.toString()}
+              title={p.price + '€'}
               description={p.description}
             />
             <dl>
@@ -79,4 +70,4 @@ const App: React.FC = () => {
   );
 };
 
-export default withAuth(App);
+export default App;

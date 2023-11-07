@@ -1,5 +1,5 @@
-import { createContext, FC, ReactNode, useContext, useEffect } from "react";
-import useWeb3Provider, { IWeb3State } from "../../hooks/useWeb3Provider";
+import { createContext, FC, ReactNode, useContext, useEffect } from 'react';
+import useWeb3Provider, { IWeb3State } from '../../hooks/useWeb3Provider';
 // import { notification } from "antd";
 
 export interface IWeb3Context {
