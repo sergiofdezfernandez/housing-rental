@@ -5,8 +5,8 @@ import type { IWeb3Context } from '../web3/Web3Context';
 import { useWeb3Context } from '../web3/Web3Context';
 import { useSearchParams } from 'next/navigation';
 import { handleError } from './shared/error_handler';
-import { RpcError } from '../model/domain_model';
-import { RentPropertyFormModel } from '../model/forms_models';
+import { RpcError } from '../../lib/model/domain_definitions';
+import { RentPropertyFormModel } from '../../lib/model/forms_definitions';
 
 const RentPropertyForm: React.FC = () => {
   const {

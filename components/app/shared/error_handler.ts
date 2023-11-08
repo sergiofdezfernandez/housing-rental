@@ -1,6 +1,6 @@
 import { type AuthError } from '@supabase/supabase-js';
 import notification from 'antd/es/notification';
-import { RpcError } from '../../model/domain_model';
+import { RpcError } from '../../../lib/model/domain_definitions';
 import { ApiError } from 'next/dist/server/api-utils';
 
 export function handleError(rpcError: RpcError): void {

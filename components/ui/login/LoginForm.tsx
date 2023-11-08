@@ -1,6 +1,6 @@
 import { UserOutlined } from '@ant-design/icons';
 import { Form, Card, Button, Input, Flex } from 'antd';
-import { type LoginForm } from '@/components/model/forms_models';
+import { type LoginForm } from '@/lib/model/forms_definitions';
 import { useRouter } from 'next/navigation';
 import { AuthError } from '@supabase/supabase-js';
 import { handleAuthError } from '@/components/app/shared/error_handler';
