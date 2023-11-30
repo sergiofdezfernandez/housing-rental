@@ -3,12 +3,12 @@ import { Form, Card, Button, Input, Flex } from 'antd';
 import { type LoginForm } from '@/lib/model/forms_definitions';
 import { useRouter } from 'next/navigation';
 import { AuthError } from '@supabase/supabase-js';
-import { handleAuthError } from '@/components/app/shared/error_handler';
+import { handleAuthError } from '@/components/shared/error_handler';
 
 export default function LoginForm() {
   const router = useRouter();
   const handleSubmit = async (values: LoginForm) => {
-    const response = await fetch('http://localhost:3000/auth/login', {
+    const response = await fetch('/auth/login', {
       method: 'POST',
       body: JSON.stringify(values),
       headers: {

@@ -1,12 +1,12 @@
 import { Button, Form, Input, notification, Card, Tooltip } from 'antd';
 import Title from 'antd/es/typography/Title';
 import React from 'react';
-import type { IWeb3Context } from '../web3/Web3Context';
-import { useWeb3Context } from '../web3/Web3Context';
+import type { IWeb3Context } from './web3/Web3Context';
+import { useWeb3Context } from './web3/Web3Context';
 import { useSearchParams } from 'next/navigation';
 import { handleError } from './shared/error_handler';
-import { RpcError } from '../../lib/model/domain_definitions';
-import { RentPropertyFormModel } from '../../lib/model/forms_definitions';
+import { RpcError } from '../lib/model/domain_definitions';
+import { RentPropertyFormModel } from '../lib/model/forms_definitions';
 
 const RentPropertyForm: React.FC = () => {
   const {

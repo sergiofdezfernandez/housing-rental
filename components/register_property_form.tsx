@@ -1,11 +1,11 @@
 import { Button, Form, Input, InputNumber, notification, Card } from 'antd';
 import Title from 'antd/es/typography/Title';
 import React from 'react';
-import type { IWeb3Context } from '../web3/Web3Context';
-import { useWeb3Context } from '../web3/Web3Context';
+import type { IWeb3Context } from './web3/Web3Context';
+import { useWeb3Context } from './web3/Web3Context';
 import { handleError } from './shared/error_handler';
-import { RegisterPropertyFormModel } from '../../lib/model/forms_definitions';
-import { RpcError } from '../../lib/model/domain_definitions';
+import { RegisterPropertyFormModel } from '../lib/model/forms_definitions';
+import { RpcError } from '../lib/model/domain_definitions';
 
 const RegisterPropertyForm: React.FC = () => {
   const {

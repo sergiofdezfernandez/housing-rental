@@ -1,5 +1,5 @@
 import React from 'react';
-import RegisterPropertyForm from '../../components/app/register_property_form';
+import RegisterPropertyForm from '../../components/register_property_form';
 
 class RegisterProperty extends React.Component {
   render() {

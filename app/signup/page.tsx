@@ -3,7 +3,7 @@ import { supabase } from '../../lib/supabase-client';
 import notification from 'antd/es/notification';
 import { Button, Card, Form, Input, Select } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
-import { handleAuthError } from '../../components/app/shared/error_handler';
+import { handleAuthError } from '../../components/shared/error_handler';
 import { SignUpForm } from '../../lib/model/forms_definitions';
 import Title from 'antd/es/typography/Title';
 import { useRouter } from 'next/navigation';
