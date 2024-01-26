@@ -1,15 +1,15 @@
-import { UserOutlined } from '@ant-design/icons';
-import { Form, Card, Button, Input, Flex, Col, Row } from 'antd';
-import { type LoginForm } from '@/lib/model/forms_definitions';
-import { useRouter } from 'next/navigation';
-import { AuthError } from '@supabase/supabase-js';
 import { handleAuthError } from '@/components/shared/error_handler';
-import Link from 'next/link';
+import { SignUpForm } from '@/lib/model/forms_definitions';
+import { UserOutlined } from '@ant-design/icons';
+import { AuthError } from '@supabase/supabase-js';
+import { Form, Card, Button, Input, Select, Flex } from 'antd';
+import Title from 'antd/es/typography/Title';
+import { useRouter } from 'next/navigation';
 
-export default function LoginForm() {
+export default function SignupForm() {
   const router = useRouter();
-  const handleSubmit = async (values: LoginForm) => {
-    const response = await fetch('/auth/login', {
+  const handleSubmit = async (values: SignUpForm) => {
+    const response = await fetch('/auth/signup', {
       method: 'POST',
       body: JSON.stringify(values),
       headers: {
@@ -25,16 +25,27 @@ export default function LoginForm() {
       }
     }
   };
+
   return (
-    <Form name="basic" labelCol={{ span: 8 }} autoComplete="off" onFinish={handleSubmit}>
+    <Form
+      name="basic"
+      labelCol={{ span: 8 }}
+      initialValues={{ role: 'TENANT' }}
+      onFinish={handleSubmit}
+      autoComplete="off"
+    >
       <Flex align="center" justify="center" style={{ height: '90vh' }} wrap="wrap">
+        <Title level={2}></Title>
         <Card
+          bordered={false}
           actions={[
-            <Link href={'/signup'} className="textCenter">
-              ¿No estas registrado? Registrate aquí
-            </Link>,
+            <Form.Item key={'submit'}>
+              <Button type="primary" htmlType="submit">
+                Enviar
+              </Button>
+            </Form.Item>,
           ]}
-          title="Iniciar sesión"
+          title="Registrarse"
         >
           <Form.Item
             label="email"
@@ -50,15 +61,14 @@ export default function LoginForm() {
           >
             <Input type="password" />
           </Form.Item>
-          <Row justify="center">
-            <Col>
-              <Form.Item key={'submit'} className="text-center">
-                <Button type="default" htmlType="submit">
-                  Enviar
-                </Button>
-              </Form.Item>
-            </Col>
-          </Row>
+          <Form.Item label="role" name="role">
+            <Select
+              options={[
+                { value: 'TENANT', label: 'Arrendatario' },
+                { value: 'LANDLORD', label: 'Arrendador' },
+              ]}
+            />
+          </Form.Item>
         </Card>
       </Flex>
     </Form>

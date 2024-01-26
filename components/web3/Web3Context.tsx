@@ -1,7 +1,7 @@
 'use client';
 import { createContext, FC, ReactNode, useContext, useEffect } from 'react';
 import useWeb3Provider, { IWeb3State } from '../../hooks/useWeb3Provider';
-// import { notification } from "antd";
+import { notification } from 'antd';
 
 export interface IWeb3Context {
   connectWallet: () => Promise<unknown>;
@@ -19,24 +19,26 @@ const Web3ContextProvider: FC<Props> = ({ children }) => {
   const { connectWallet, disconnect, state } = useWeb3Provider();
 
   useEffect(() => {
-    //TODO adapt to typescript
-    // state.ethereum?.on("accountsChanged", handleAccountChanged);
-    // return () => {
-    //   state.ethereum?.removeListener("accountsChanged", handleAccountChanged);
-    // };
+    if (state.ethereum) {
+      state.ethereum?.on('accountsChanged', handleAccountChanged);
+      return () => {
+        state.ethereum?.removeListener('accountsChanged', handleAccountChanged);
+      };
+    }
   });
 
-  // function handleAccountChanged(accounts: Array<string>) {
-  //   if (accounts.length === 0) {
-  //     notification.info({ message: "No existen cuentas" });
-  //   } else if (accounts[0] !== state.address) {
-  //     notification.success({
-  //       message: "La cuenta de la cartera ha sido cambiada",
-  //       description: accounts[0],
-  //     });
-  //     state.address = accounts[0];
-  //   }
-  // }
+  function handleAccountChanged(accounts: Array<string>) {
+    if (accounts.length === 0) {
+      notification.info({ message: 'No existen cuentas' });
+    } else if (accounts[0] !== state.address) {
+      notification.success({
+        message: 'La cuenta de la cartera ha sido cambiada',
+        description: accounts[0],
+      });
+      state.address = accounts[0];
+    }
+  }
+
   return (
     <Web3Context.Provider
       value={{

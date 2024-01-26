@@ -1,12 +1,21 @@
 'use client';
-import LoginForm from '@/components/ui/login/LoginForm';
-import Image from 'next/image';
+
+import { useWeb3Context, IWeb3Context } from '@/components/web3/Web3Context';
+import Button from 'antd/es/button';
 
 export default function Page() {
+  const {
+    connectWallet,
+    state: { isAuthenticated },
+  } = useWeb3Context() as IWeb3Context;
+
   return (
     <div style={{ width: '100%', height: '100%', position: 'relative' }}>
-      <Image src={'/main.png'} alt="Housing rental" fill={true} priority={true} />
-      <LoginForm></LoginForm>
+      {!isAuthenticated && (
+        <Button type="primary" onClick={connectWallet}>
+          Connect wallet
+        </Button>
+      )}
     </div>
   );
 }
