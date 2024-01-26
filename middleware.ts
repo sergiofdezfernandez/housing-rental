@@ -10,7 +10,7 @@ export async function middleware(req: NextRequest) {
   const supabase = createMiddlewareClient<Database>({ req, res });
 
   // Refresh session if expired - required for Server Components
-  await supabase.auth.getSession()
+  await supabase.auth.getSession();
 
   // const { data: { user } } = await supabase.auth.getUser();
 
@@ -32,6 +32,6 @@ export const config = {
      * - favicon.ico (favicon file)
      * Feel free to modify this pattern to include more paths.
      */
-    '/((?!_next/static|_next/image|favicon.ico).*)'
+    '/((?!_next/static|_next/image|favicon.ico).*)',
   ],
-}
+};

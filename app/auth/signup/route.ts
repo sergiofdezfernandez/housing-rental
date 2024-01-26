@@ -17,8 +17,11 @@ export async function POST(request: Request) {
   });
   if (error) {
     return NextResponse.json(error);
-  } if (data) {
-    const { error } = await supabase.from('user_roles').insert({ id: data.user?.id, role_name: role });
+  }
+  if (data) {
+    const { error } = await supabase
+      .from('user_roles')
+      .insert({ id: data.user?.id, role_name: role });
     if (error) {
       return NextResponse.json(error);
     }
