@@ -23,6 +23,7 @@
     "@types/react": "18.2.6",
     "@types/react-dom": "18.2.4",
     "@types/web3": "^1.2.2",
+    "@vercel/speed-insights": "^1.0.8",
     "@web3-react/core": "^8.2.0",
     "@web3-react/injected-connector": "^6.0.7",
     "antd": "^5.11.0",

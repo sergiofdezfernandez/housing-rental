@@ -12,6 +12,7 @@ import Link from 'next/link';
 import React from 'react';
 import '@/app/global.css';
 import Web3ContextProvider from '@/components/web3/Web3Context';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 const links = [
   { name: 'Home', href: '/', icon: HomeOutlined },
@@ -58,6 +59,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               </Sider>
               <Layout>
                 <Content>{children}</Content>
+                <SpeedInsights />
                 <Footer>Developed by Sergio Fernández ©2023-2024</Footer>
               </Layout>
             </Layout>
