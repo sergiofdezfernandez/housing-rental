@@ -5,8 +5,8 @@ import { ApiError } from 'next/dist/server/api-utils';
 
 export function handleError(rpcError: RpcError): void {
   notification.error({
-    message: rpcError.message,
-    description: rpcError.data.message,
+    message: rpcError.code,
+    description: rpcError.info.error.data.data.reason,
   });
 }
 

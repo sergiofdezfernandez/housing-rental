@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 
 export default function Wallet() {
   const {
-    connectWallet,
+    disconnect,
     state: { isAuthenticated },
   } = useWeb3Context() as IWeb3Context;
 
@@ -29,7 +29,7 @@ export default function Wallet() {
 
   return (
     <section>
-      {isAuthenticated && <Button onClick={connectWallet}>Connect wallet</Button>}
+      {isAuthenticated && <Button onClick={disconnect}>Disconnect wallet</Button>}
       <p>{userData?.id}</p>
     </section>
   );

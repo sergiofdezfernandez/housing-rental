@@ -19,9 +19,9 @@ export interface RegisterPropertyFormModel {
 
 export interface RentPropertyFormModel {
   id: number;
-  name: string;
-  phoneNumber: string;
-  email: string;
+  tenantName: string;
+  tenantPhone: string;
+  tenantEmail: string;
   duration: number;
   deposit: number;
 }

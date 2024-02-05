@@ -31,6 +31,8 @@ const RegisterPropertyForm: React.FC = () => {
     } catch (error: unknown) {
       if (error instanceof RpcError) {
         handleError(error);
+      } else {
+        console.error(error);
       }
     }
   }

@@ -5,25 +5,25 @@ import React from 'react';
 import type { IWeb3Context } from './web3/Web3Context';
 import { useWeb3Context } from './web3/Web3Context';
 import { useSearchParams } from 'next/navigation';
-import { handleError } from './shared/error_handler';
-import { RpcError } from '../lib/model/domain_definitions';
 import { RentPropertyFormModel } from '../lib/model/forms_definitions';
+import { handleError } from './shared/error_handler';
 
 const RentPropertyForm: React.FC = () => {
   const {
     state: { contract, address },
   } = useWeb3Context() as IWeb3Context;
-
   const searchParams = useSearchParams();
 
   async function onFinish(values: RentPropertyFormModel) {
-    try {
-      const tx = await contract!.rentProperty(
+    const aux = Number(searchParams.get('price')!);
+    console.log(aux);
+    contract
+      ?.rentProperty(
         {
           id: address,
-          name: values.name,
-          phoneNumber: values.phoneNumber,
-          email: values.email,
+          name: values.tenantName,
+          phoneNumber: values.tenantPhone,
+          email: values.tenantEmail,
         },
         Number(searchParams.get('propertyId')!),
         values.duration,
@@ -31,17 +31,16 @@ const RentPropertyForm: React.FC = () => {
         {
           value: Number(searchParams.get('price')!),
         }
-      );
-      await tx.wait();
-      notification.success({
-        message: 'Propuesta de alquiler de propiedad enviada',
-        description: 'Propuesta enviada correctamente',
-      });
-    } catch (error: unknown) {
-      if (error instanceof RpcError) {
+      )
+      .then(() => {
+        notification.success({
+          message: 'Propuesta de alquiler de propiedad enviada',
+          description: 'Propuesta enviada correctamente',
+        });
+      })
+      .catch((error: any) => {
         handleError(error);
-      }
-    }
+      });
   }
   return (
     <Form
@@ -57,7 +56,7 @@ const RentPropertyForm: React.FC = () => {
         actions={[
           <Form.Item key={'submit'}>
             <Button type="default" htmlType="submit">
-              Aceptar
+              Enviar
             </Button>
           </Form.Item>,
         ]}

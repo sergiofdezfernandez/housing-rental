@@ -44,8 +44,8 @@ const useWeb3Provider = () => {
       if (accounts.length > 0) {
         const signer = await provider.getSigner();
         const chain = Number(await (await provider.getNetwork()).chainId);
-        if (chain !== 97) {
-          notification.error({ message: 'Cambie la red a binanceTestNet' });
+        if (chain !== 1337) {
+          notification.error({ message: 'This contract is not deployed in that network' });
           return;
         }
         setState({

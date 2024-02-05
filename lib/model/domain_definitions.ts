@@ -11,6 +11,7 @@ export interface Property {
 }
 
 export interface Landlord {
+  id: number;
   name: string;
   phoneNumber: string;
   email: string;
@@ -40,12 +41,16 @@ export enum State {
 }
 export class RpcError {
   code!: string;
-  data!: {
-    code: number;
-    data: string;
-    message: string;
-  };
-  message!: string;
+  info!: {
+    error: {
+      data: {
+        data: {
+          message: string;
+          reason: string;
+        }
+      }
+    }
+  }
 }
 
 export interface EthereumProviderWithEventSubscription extends Eip1193Provider {

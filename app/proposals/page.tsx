@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import { LeaseAgreement } from '../../lib/model/domain_definitions';
 import { Card, Tooltip, Row, Col } from 'antd';
 import Meta from 'antd/es/card/Meta';
+import Title from 'antd/es/typography/Title';
 
 const App: React.FC = () => {
   const {
@@ -27,21 +28,24 @@ const App: React.FC = () => {
   }, [contract, isAuthenticated]);
 
   return (
-    <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
-      {leaseAgreements?.map((la) => (
-        <Col span={6} key={la.id} xs={24} md={6}>
-          <Card loading={loading} actions={[<Tooltip title="Alquilar" key="edit"></Tooltip>]}>
-            <Meta
-              avatar={'Id: ' + la.id.toString()}
-              title={la.leaseDuration}
-              description={la.state}
-            />
-            {la.state.toString()}
-            {la.tenant.email}
-          </Card>
-        </Col>
-      ))}
-    </Row>
+    <section>
+      <Title level={1}>Proposals</Title>
+      <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
+        {leaseAgreements?.map((la) => (
+          <Col span={6} key={la.id} xs={24} md={6}>
+            <Card loading={loading} actions={[<Tooltip title="Alquilar" key="edit"></Tooltip>]}>
+              <Meta
+                avatar={'Id: ' + la.id.toString()}
+                title={la.leaseDuration}
+                description={la.state}
+              />
+              {la.state.toString()}
+              {la.tenant.email}
+            </Card>
+          </Col>
+        ))}
+      </Row>
+    </section>
   );
 };
 

@@ -20,9 +20,13 @@ const App: React.FC = () => {
 
   useEffect(() => {
     const getProperties = async () => {
-      const properties: Array<Property> = await contract.getRegisteredProperties();
-      setProperties(properties);
-      setLoading(false);
+      try {
+        const properties: Property[] = await contract?.getRegisteredProperties();
+        setProperties(properties);
+        setLoading(false);
+      } catch (error) {
+        console.log(error);
+      }
     };
     if (contract && isAuthenticated) {
       getProperties();
@@ -38,10 +42,10 @@ const App: React.FC = () => {
   return (
     <section>
       <FloatButton shape="circle" type="default" icon={<PlusOutlined />} onClick={addProperty} />
-      <Title level={1}>Properties page</Title>
-      <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
+      <Title level={1}>Properties</Title>
+      <Row gutter={[8, 8]}>
         {properties?.map((p) => (
-          <Col span={6} key={p.id} xs={24} md={6}>
+          <Col span={4} key={p.id} xs={24} md={6}>
             <Card
               loading={loading}
               actions={[
@@ -52,6 +56,7 @@ const App: React.FC = () => {
                       query: {
                         propertyId: p.id.toString(),
                         securityDeposit: p.securityDeposit.toString(),
+                        price: p.price.toString(),
                       },
                     }}
                   >
