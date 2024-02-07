@@ -1,28 +1,77 @@
-import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs';
-import { NextResponse } from 'next/server';
+import { createServerClient, type CookieOptions } from '@supabase/ssr';
+import { NextResponse, type NextRequest } from 'next/server';
 
-import type { NextRequest } from 'next/server';
-import type { Database } from './lib/model/database-auth.types';
+export async function middleware(request: NextRequest) {
+  let response = NextResponse.next({
+    request: {
+      headers: request.headers,
+    },
+  });
 
-export async function middleware(req: NextRequest) {
-  // const allowedPaths = ['/login', '/signup', '/auth/login', '/auth/signup'];
-  const res = NextResponse.next();
-  const supabase = createMiddlewareClient<Database>({ req, res });
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        get(name: string) {
+          return request.cookies.get(name)?.value;
+        },
+        set(name: string, value: string, options: CookieOptions) {
+          request.cookies.set({
+            name,
+            value,
+            ...options,
+          });
+          response = NextResponse.next({
+            request: {
+              headers: request.headers,
+            },
+          });
+          response.cookies.set({
+            name,
+            value,
+            ...options,
+          });
+        },
+        remove(name: string, options: CookieOptions) {
+          request.cookies.set({
+            name,
+            value: '',
+            ...options,
+          });
+          response = NextResponse.next({
+            request: {
+              headers: request.headers,
+            },
+          });
+          response.cookies.set({
+            name,
+            value: '',
+            ...options,
+          });
+        },
+      },
+    }
+  );
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
-  // Refresh session if expired - required for Server Components
-  await supabase.auth.getSession();
+  if (
+    !user &&
+    !request.nextUrl.pathname.startsWith('/login') &&
+    !request.nextUrl.pathname.startsWith('/signup')
+  ) {
+    return NextResponse.redirect(new URL('/login', request.url));
+  }
 
-  // const { data: { user } } = await supabase.auth.getUser();
+  if (user && request.nextUrl.pathname === '/login') {
+    return NextResponse.redirect(new URL('/', request.url));
+  }
 
-  // if (user && req.nextUrl.pathname === '/') {
-  //   return NextResponse.redirect(new URL('/', req.url))
-  // }
-  // if (!user && !allowedPaths.includes(req.nextUrl.pathname)) {
-  //   return NextResponse.redirect(new URL('/login', req.url))
-  // }
-
-  return res;
+  return response;
 }
+
 export const config = {
   matcher: [
     /*

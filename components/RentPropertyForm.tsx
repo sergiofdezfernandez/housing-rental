@@ -5,7 +5,6 @@ import React from 'react';
 import type { IWeb3Context } from './web3/Web3Context';
 import { useWeb3Context } from './web3/Web3Context';
 import { useSearchParams } from 'next/navigation';
-import { RentPropertyFormModel } from '../lib/model/forms_definitions';
 import { handleError } from './shared/error_handler';
 
 const RentPropertyForm: React.FC = () => {
@@ -14,7 +13,7 @@ const RentPropertyForm: React.FC = () => {
   } = useWeb3Context() as IWeb3Context;
   const searchParams = useSearchParams();
 
-  async function onFinish(values: RentPropertyFormModel) {
+  async function onFinish(values: any) {
     const aux = Number(searchParams.get('price')!);
     console.log(aux);
     contract

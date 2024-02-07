@@ -1,37 +1,16 @@
-import { handleAuthError } from '@/components/shared/error_handler';
-import { SignUpForm } from '@/lib/model/forms_definitions';
+import { signup } from '@/app/auth/actions';
 import { UserOutlined } from '@ant-design/icons';
-import { AuthError } from '@supabase/supabase-js';
 import { Form, Card, Button, Input, Select, Flex } from 'antd';
 import Title from 'antd/es/typography/Title';
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 export default function SignupForm() {
-  const router = useRouter();
-  const handleSubmit = async (values: SignUpForm) => {
-    const response = await fetch('/auth/signup', {
-      method: 'POST',
-      body: JSON.stringify(values),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-    if (response.ok) {
-      const body: AuthError = await response.json();
-      if (body.status === 200) {
-        router.push('/properties');
-      } else {
-        handleAuthError(body);
-      }
-    }
-  };
-
   return (
     <Form
       name="basic"
       labelCol={{ span: 8 }}
       initialValues={{ role: 'TENANT' }}
-      onFinish={handleSubmit}
+      onFinish={signup}
       autoComplete="off"
     >
       <Flex align="center" justify="center" style={{ height: '90vh' }} wrap="wrap">
@@ -39,11 +18,10 @@ export default function SignupForm() {
         <Card
           bordered={false}
           actions={[
-            <Form.Item key={'submit'}>
-              <Button type="primary" htmlType="submit">
-                Enviar
-              </Button>
-            </Form.Item>,
+            <Link href={'/login'} className="textCenter">
+              Iniciar sesión
+            </Link>,
+            <Button htmlType="submit">Enviar</Button>,
           ]}
           title="Registrarse"
         >

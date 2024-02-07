@@ -4,7 +4,6 @@ import React from 'react';
 import type { IWeb3Context } from './web3/Web3Context';
 import { useWeb3Context } from './web3/Web3Context';
 import { handleError } from './shared/error_handler';
-import { RegisterPropertyFormModel } from '../lib/model/forms_definitions';
 import { RpcError } from '../lib/model/domain_definitions';
 
 const RegisterPropertyForm: React.FC = () => {
@@ -12,7 +11,7 @@ const RegisterPropertyForm: React.FC = () => {
     state: { contract },
   } = useWeb3Context() as IWeb3Context;
 
-  async function onFinish(values: RegisterPropertyFormModel) {
+  async function onFinish(values: any) {
     try {
       const tx = await contract!.registerProperty(
         values.postalAddress,

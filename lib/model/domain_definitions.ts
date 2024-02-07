@@ -34,6 +34,11 @@ export interface Tenant {
   email: string;
 }
 
+export interface User {
+  email?: string;
+  password?: string;
+  role?: string;
+}
 export enum State {
   Created,
   Started,
@@ -47,10 +52,10 @@ export class RpcError {
         data: {
           message: string;
           reason: string;
-        }
-      }
-    }
-  }
+        };
+      };
+    };
+  };
 }
 
 export interface EthereumProviderWithEventSubscription extends Eip1193Provider {
