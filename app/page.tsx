@@ -12,9 +12,11 @@ export default function Page() {
   return (
     <div style={{ width: '100%', height: '100%', position: 'relative' }}>
       {!isAuthenticated && (
-        <Button type="primary" onClick={connectWallet}>
-          Connect wallet
-        </Button>
+        <>
+          <Button type="primary" onClick={connectWallet}>
+            Connect wallet
+          </Button>
+        </>
       )}
     </div>
   );
