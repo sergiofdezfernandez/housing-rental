@@ -36,7 +36,7 @@ const App: React.FC = () => {
   }, [contract, isAuthenticated]);
 
   function addProperty() {
-    router.push('/properties/new');
+    router.push('7dashboard/properties/new');
   }
 
   return (
@@ -52,7 +52,7 @@ const App: React.FC = () => {
                 <Tooltip title="Alquilar" key="edit">
                   <Link
                     href={{
-                      pathname: '/properties/rent',
+                      pathname: '/dashboard/properties/rent',
                       query: {
                         propertyId: p.id.toString(),
                         securityDeposit: p.securityDeposit.toString(),

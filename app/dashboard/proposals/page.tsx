@@ -1,8 +1,8 @@
 'use client';
 import React, { useState } from 'react';
-import { IWeb3Context, useWeb3Context } from '../../components/web3/Web3Context';
+import { IWeb3Context, useWeb3Context } from '../../../components/web3/Web3Context';
 import { useEffect } from 'react';
-import { LeaseAgreement } from '../../lib/model/domain_definitions';
+import { LeaseAgreement } from '../../../lib/model/domain_definitions';
 import { Card, Tooltip, Row, Col } from 'antd';
 import Meta from 'antd/es/card/Meta';
 import Title from 'antd/es/typography/Title';
