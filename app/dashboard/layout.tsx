@@ -3,7 +3,6 @@ import { CustomHeader } from '@/components/shared/CustomHeader';
 import { User } from '@/lib/model/domain_definitions';
 import { createClient } from '@/lib/supabase/client';
 import { HomeOutlined, UnorderedListOutlined, UploadOutlined } from '@ant-design/icons';
-import { AntdRegistry } from '@ant-design/nextjs-registry';
 import { Layout, Menu, theme } from 'antd';
 import Sider from 'antd/es/layout/Sider';
 import { Content, Footer } from 'antd/es/layout/layout';
@@ -11,9 +10,9 @@ import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 
 const links = [
-  { name: 'Home', href: '/dashboard', icon: HomeOutlined },
-  { name: 'Real State Properties', href: '/dashboard/properties', icon: UnorderedListOutlined },
-  { name: 'Proposals', href: '/dashboard/proposals', icon: UploadOutlined },
+  { name: 'Inicio', href: '/dashboard', icon: HomeOutlined },
+  { name: 'Propiedades', href: '/dashboard/properties', icon: UnorderedListOutlined },
+  { name: 'Propuestas', href: '/dashboard/proposals', icon: UploadOutlined },
 ];
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
@@ -71,7 +70,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             borderRadius: borderRadiusLG,
           }}
         >
-          <AntdRegistry>{children}</AntdRegistry>
+          {children}
         </Content>
         <Footer>Developed by Sergio Fernández ©2023-2024</Footer>
       </Layout>

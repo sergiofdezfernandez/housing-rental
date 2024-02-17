@@ -31,9 +31,9 @@ export function CustomHeader(props: { user?: User }) {
       }}
     >
       <section style={{ display: 'flex', alignItems: 'center', gap: '1em' }}>
+        <w3m-button></w3m-button>
         <UserOutlined />
         <Tooltip title={props.user?.role}>{props.user?.email}</Tooltip>
-
         <Tooltip title="Cerrar sesión">
           <Button icon={<PoweroffOutlined />} onClick={logOut} danger></Button>
         </Tooltip>

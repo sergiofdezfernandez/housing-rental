@@ -1,19 +1,15 @@
 import { Button, Form, Input, InputNumber, notification, Card } from 'antd';
 import Title from 'antd/es/typography/Title';
 import React from 'react';
-import type { IWeb3Context } from './web3/Web3Context';
-import { useWeb3Context } from './web3/Web3Context';
-import { handleError } from './shared/error_handler';
-import { RpcError } from '../lib/model/domain_definitions';
+import { redirect } from 'next/navigation';
+import { useContractContext } from './shared/context/ContractContext';
 
 const RegisterPropertyForm: React.FC = () => {
-  const {
-    state: { contract },
-  } = useWeb3Context() as IWeb3Context;
+  const { contractInstance } = useContractContext() || {};
 
   async function onFinish(values: any) {
     try {
-      const tx = await contract!.registerProperty(
+      const tx = await contractInstance!.registerProperty(
         values.postalAddress,
         values.description,
         values.price,
@@ -27,12 +23,9 @@ const RegisterPropertyForm: React.FC = () => {
         message: 'Registro de propiedad',
         description: 'Propiedad registrada correctamente',
       });
-    } catch (error: unknown) {
-      if (error instanceof RpcError) {
-        handleError(error);
-      } else {
-        console.error(error);
-      }
+      redirect('/dashboard/properties');
+    } catch (error) {
+      console.error(error);
     }
   }
 

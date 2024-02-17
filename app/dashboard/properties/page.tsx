@@ -1,5 +1,4 @@
 'use client';
-import { IWeb3Context, useWeb3Context } from '@/components/web3/Web3Context';
 import { Property } from '@/lib/model/domain_definitions';
 import { EditOutlined, PlusOutlined } from '@ant-design/icons';
 import { Row, Col, Card, Tooltip, FloatButton } from 'antd';
@@ -9,34 +8,27 @@ import Link from 'next/link';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useContractContext } from '@/components/shared/context/ContractContext';
 
 const App: React.FC = () => {
   const router = useRouter();
-  const {
-    state: { contract, isAuthenticated },
-  } = useWeb3Context() as IWeb3Context;
   const [properties, setProperties] = useState<Array<Property> | null>([]);
-  const [loading, setLoading] = useState(true);
+  const { contractInstance } = useContractContext() || {};
 
   useEffect(() => {
     const getProperties = async () => {
       try {
-        const properties: Property[] = await contract?.getRegisteredProperties();
+        const properties: Property[] = await contractInstance?.getRegisteredProperties();
         setProperties(properties);
-        setLoading(false);
       } catch (error) {
         console.log(error);
       }
     };
-    if (contract && isAuthenticated) {
-      getProperties();
-    } else {
-      setProperties([]);
-    }
-  }, [contract, isAuthenticated]);
+    getProperties();
+  }, [contractInstance]);
 
   function addProperty() {
-    router.push('7dashboard/properties/new');
+    router.push('properties/new');
   }
 
   return (
@@ -47,7 +39,6 @@ const App: React.FC = () => {
         {properties?.map((p) => (
           <Col span={4} key={p.id} xs={24} md={6}>
             <Card
-              loading={loading}
               actions={[
                 <Tooltip title="Alquilar" key="edit">
                   <Link

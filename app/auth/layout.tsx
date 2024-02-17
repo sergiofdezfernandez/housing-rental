@@ -5,7 +5,7 @@ import React from 'react';
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
     <main>
-      <Image src={'/main.png'} alt="main image" layout="fill" objectFit="cover" loading="lazy" />
+      <Image src="/main.png" alt="main background image" fill={true} priority={true} />
       {children}
     </main>
   );

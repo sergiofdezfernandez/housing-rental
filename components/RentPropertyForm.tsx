@@ -2,19 +2,17 @@
 import { Button, Form, Input, notification, Card, Tooltip, Flex } from 'antd';
 import Title from 'antd/es/typography/Title';
 import React from 'react';
-import type { IWeb3Context } from './web3/Web3Context';
-import { useWeb3Context } from './web3/Web3Context';
 import { useSearchParams } from 'next/navigation';
-import { handleError } from './shared/error_handler';
+import { useContractContext } from './shared/context/ContractContext';
+import { useWeb3ModalAccount } from '@web3modal/ethers5/react';
 
 export default function RentPropertyForm(props: { userEmail: string }) {
-  const {
-    state: { contract, address },
-  } = useWeb3Context() as IWeb3Context;
   const searchParams = useSearchParams();
+  const { contractInstance } = useContractContext() || {};
+  const { address } = useWeb3ModalAccount();
 
   async function onFinish(values: any) {
-    contract
+    contractInstance
       ?.rentProperty(
         {
           id: address,
@@ -36,7 +34,7 @@ export default function RentPropertyForm(props: { userEmail: string }) {
         });
       })
       .catch((error: any) => {
-        handleError(error);
+        console.error(error);
       });
   }
   return (

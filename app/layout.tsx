@@ -1,18 +1,21 @@
 'use client';
 import React from 'react';
 import '@/app/global.css';
-import Web3ContextProvider from '@/components/web3/Web3Context';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { AntdRegistry } from '@ant-design/nextjs-registry';
+import { Web3ModalProvider } from '@/components/shared/context/Web3Modal';
+import { ContractProvider } from '@/components/shared/context/ContractContext';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body>
-        <Web3ContextProvider>
-          <AntdRegistry>{children}</AntdRegistry>
-          <SpeedInsights />
-        </Web3ContextProvider>
+        <Web3ModalProvider>
+          <ContractProvider>
+            <AntdRegistry>{children}</AntdRegistry>
+          </ContractProvider>
+        </Web3ModalProvider>
+        <SpeedInsights />
       </body>
     </html>
   );

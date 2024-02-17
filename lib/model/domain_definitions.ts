@@ -1,5 +1,3 @@
-import { Eip1193Provider } from 'ethers';
-
 export interface Property {
   id: number;
   landlord: Landlord;
@@ -46,19 +44,17 @@ export enum State {
 }
 export class RpcError {
   code!: string;
-  info!: {
-    error: {
-      data: {
-        data: {
-          message: string;
-          reason: string;
-        };
-      };
-    };
+  error!: {
+    code: string;
+    message: string;
   };
 }
 
-export interface EthereumProviderWithEventSubscription extends Eip1193Provider {
-  on: (eventName: string, listener: (args: never[]) => void) => void;
-  removeListener: (event: string, callback: (args: never[]) => void) => void;
+export class RpcCallError {
+  code!: string;
+  data!: {
+    data: {
+      reason: string;
+    };
+  };
 }
