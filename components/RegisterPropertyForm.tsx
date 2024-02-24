@@ -3,8 +3,9 @@ import Title from 'antd/es/typography/Title';
 import React from 'react';
 import { redirect } from 'next/navigation';
 import { useContractContext } from './shared/context/ContractContext';
+import { User } from '@/lib/model/domain_definitions';
 
-const RegisterPropertyForm: React.FC = () => {
+export default function RegisterPropertyForm(props: { userProfile: User | null }) {
   const { contractInstance } = useContractContext() || {};
 
   async function onFinish(values: any) {
@@ -16,7 +17,7 @@ const RegisterPropertyForm: React.FC = () => {
         values.securityDeposit,
         values.landlordName,
         values.landlordPhone,
-        values.landlordEmail
+        props.userProfile?.email
       );
       await tx.wait();
       notification.success({
@@ -55,7 +56,11 @@ const RegisterPropertyForm: React.FC = () => {
         >
           <Input />
         </Form.Item>
-        <Form.Item label="description" name="description" rules={[{ required: false }]}>
+        <Form.Item
+          label="description"
+          name="description"
+          rules={[{ required: true, message: 'Please enter description' }]}
+        >
           <Input.TextArea />
         </Form.Item>
         <Form.Item
@@ -80,13 +85,6 @@ const RegisterPropertyForm: React.FC = () => {
           <Input />
         </Form.Item>
         <Form.Item
-          label="landlordEmail"
-          name="landlordEmail"
-          rules={[{ required: true, message: 'Please enter your landlord email' }]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
           label="landlordPhone"
           name="landlordPhone"
           rules={[{ required: true, message: 'Please enter your landlord phone' }]}
@@ -96,6 +94,4 @@ const RegisterPropertyForm: React.FC = () => {
       </Card>
     </Form>
   );
-};
-
-export default RegisterPropertyForm;
+}

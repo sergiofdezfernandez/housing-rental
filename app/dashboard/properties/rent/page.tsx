@@ -1,6 +1,12 @@
+'use client';
 import React from 'react';
 import RentPropertyForm from '@/components/RentPropertyForm';
+import { createClient } from '@/lib/supabase/client';
+import useUserProfile from '@/hooks/useUserProfile';
 
 export default function RentProperty() {
-  return <RentPropertyForm userEmail="test@uniovi,es"></RentPropertyForm>;
+  const supabase = createClient();
+  const { userProfile, loading } = useUserProfile(supabase);
+
+  return !loading && <RentPropertyForm userProfile={userProfile} />;
 }

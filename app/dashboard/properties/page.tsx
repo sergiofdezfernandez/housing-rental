@@ -19,7 +19,7 @@ const App: React.FC = () => {
     const getProperties = async () => {
       try {
         const properties: Property[] = await contractInstance?.getRegisteredProperties();
-        setProperties(properties);
+        setProperties(properties.filter((property) => !property.isRented));
       } catch (error) {
         console.log(error);
       }

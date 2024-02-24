@@ -5,8 +5,9 @@ import React from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useContractContext } from './shared/context/ContractContext';
 import { useWeb3ModalAccount } from '@web3modal/ethers5/react';
+import { User } from '@/lib/model/domain_definitions';
 
-export default function RentPropertyForm(props: { userEmail: string }) {
+export default function RentPropertyForm(props: { userProfile: User | null }) {
   const searchParams = useSearchParams();
   const { contractInstance } = useContractContext() || {};
   const { address } = useWeb3ModalAccount();
@@ -18,7 +19,7 @@ export default function RentPropertyForm(props: { userEmail: string }) {
           id: address,
           name: values.tenantName,
           phoneNumber: values.tenantPhone,
-          email: props.userEmail,
+          email: props.userProfile?.email,
         },
         Number(searchParams.get('propertyId')!),
         values.duration,
@@ -34,7 +35,9 @@ export default function RentPropertyForm(props: { userEmail: string }) {
         });
       })
       .catch((error: any) => {
-        console.error(error);
+        notification.error({
+          message: error.reason,
+        });
       });
   }
   return (
