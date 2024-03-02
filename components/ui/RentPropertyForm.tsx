@@ -3,14 +3,16 @@ import { Button, Form, Input, notification, Card, Tooltip, Flex } from 'antd';
 import Title from 'antd/es/typography/Title';
 import React from 'react';
 import { useSearchParams } from 'next/navigation';
-import { useContractContext } from './shared/context/ContractContext';
+import { useContractContext } from '../shared/context/ContractContext';
 import { useWeb3ModalAccount } from '@web3modal/ethers5/react';
 import { User } from '@/lib/model/domain_definitions';
+import { useRouter } from 'next/navigation';
 
 export default function RentPropertyForm(props: { userProfile: User | null }) {
   const searchParams = useSearchParams();
   const { contractInstance } = useContractContext() || {};
   const { address } = useWeb3ModalAccount();
+  const router = useRouter();
 
   async function onFinish(values: any) {
     contractInstance
@@ -33,6 +35,7 @@ export default function RentPropertyForm(props: { userProfile: User | null }) {
           message: 'Propuesta de alquiler de propiedad enviada',
           description: 'Propuesta enviada correctamente',
         });
+        router.push('/dashboard/properties');
       })
       .catch((error: any) => {
         notification.error({

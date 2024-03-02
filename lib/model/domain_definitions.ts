@@ -7,7 +7,6 @@ export interface Property {
   securityDeposit: number;
   isRented: boolean;
 }
-
 export interface Landlord {
   id: number;
   name: string;
@@ -25,6 +24,12 @@ export interface LeaseAgreement {
   state: State;
 }
 
+export enum State {
+  Created = 0,
+  Started = 1,
+  Terminated = 2,
+}
+
 export interface Tenant {
   id: number;
   name: string;
@@ -36,25 +41,4 @@ export interface User {
   email?: string;
   password?: string;
   role?: string;
-}
-export enum State {
-  Created,
-  Started,
-  Terminated,
-}
-export class RpcError {
-  code!: string;
-  error!: {
-    code: string;
-    message: string;
-  };
-}
-
-export class RpcCallError {
-  code!: string;
-  data!: {
-    data: {
-      reason: string;
-    };
-  };
 }

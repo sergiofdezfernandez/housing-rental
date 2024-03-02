@@ -2,7 +2,7 @@
 import { CustomHeader } from '@/components/shared/CustomHeader';
 import { User } from '@/lib/model/domain_definitions';
 import { createClient } from '@/lib/supabase/client';
-import { HomeOutlined, UnorderedListOutlined, UploadOutlined } from '@ant-design/icons';
+import { FolderOpenOutlined, HomeOutlined, UnorderedListOutlined } from '@ant-design/icons';
 import { Layout, Menu, theme } from 'antd';
 import Sider from 'antd/es/layout/Sider';
 import { Content, Footer } from 'antd/es/layout/layout';
@@ -12,7 +12,7 @@ import React, { useEffect, useState } from 'react';
 const links = [
   { name: 'Inicio', href: '/dashboard', icon: HomeOutlined },
   { name: 'Propiedades', href: '/dashboard/properties', icon: UnorderedListOutlined },
-  { name: 'Propuestas', href: '/dashboard/proposals', icon: UploadOutlined },
+  { name: 'Mis contratos', href: '/dashboard/proposals', icon: FolderOpenOutlined },
 ];
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {

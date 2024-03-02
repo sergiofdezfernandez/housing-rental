@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import RentPropertyForm from '@/components/RentPropertyForm';
+import RentPropertyForm from '@/components/ui/RentPropertyForm';
 import { createClient } from '@/lib/supabase/client';
 import useUserProfile from '@/hooks/useUserProfile';
 

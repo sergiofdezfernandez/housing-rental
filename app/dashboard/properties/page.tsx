@@ -1,25 +1,26 @@
 'use client';
 import { Property } from '@/lib/model/domain_definitions';
-import { EditOutlined, PlusOutlined } from '@ant-design/icons';
-import { Row, Col, Card, Tooltip, FloatButton } from 'antd';
-import Meta from 'antd/es/card/Meta';
+import { KeyOutlined, PlusOutlined, StopOutlined } from '@ant-design/icons';
+import { Row, Col, Card, FloatButton, Button, Tag } from 'antd';
 import Title from 'antd/es/typography/Title';
-import Link from 'next/link';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useContractContext } from '@/components/shared/context/ContractContext';
 
 const App: React.FC = () => {
-  const router = useRouter();
+  const { replace } = useRouter();
   const [properties, setProperties] = useState<Array<Property> | null>([]);
+  const [loading, setLoading] = useState(true);
   const { contractInstance } = useContractContext() || {};
+  const pathname = usePathname();
 
   useEffect(() => {
     const getProperties = async () => {
       try {
         const properties: Property[] = await contractInstance?.getRegisteredProperties();
-        setProperties(properties.filter((property) => !property.isRented));
+        setLoading(false);
+        setProperties(properties);
       } catch (error) {
         console.log(error);
       }
@@ -28,48 +29,42 @@ const App: React.FC = () => {
   }, [contractInstance]);
 
   function addProperty() {
-    router.push('properties/new');
+    replace(`${pathname}/new`);
+  }
+
+  function rentProperty(property: Property) {
+    const params = new URLSearchParams();
+    params.set('propertyId', property.id.toString());
+    params.set('securityDeposit', property.securityDeposit.toString());
+    params.set('price', property.price.toString());
+    replace(`${pathname}/rent?${params.toString()}`);
   }
 
   return (
     <section>
       <FloatButton shape="circle" type="default" icon={<PlusOutlined />} onClick={addProperty} />
-      <Title level={1}>Properties</Title>
-      <Row gutter={[8, 8]}>
+      <Title level={1}>Propiedades</Title>
+      <Row gutter={16}>
         {properties?.map((p) => (
           <Col span={4} key={p.id} xs={24} md={6}>
             <Card
-              actions={[
-                <Tooltip title="Alquilar" key="edit">
-                  <Link
-                    href={{
-                      pathname: '/dashboard/properties/rent',
-                      query: {
-                        propertyId: p.id.toString(),
-                        securityDeposit: p.securityDeposit.toString(),
-                        price: p.price.toString(),
-                      },
-                    }}
-                  >
-                    <EditOutlined />
-                  </Link>
-                </Tooltip>,
-              ]}
+              title={p.postalAddress}
+              loading={loading}
               cover={
                 <Image alt="example" src="properties/house.svg" width={200} height={200}></Image>
               }
+              actions={[
+                <Button onClick={() => rentProperty(p)} disabled={p.isRented}>
+                  <KeyOutlined />
+                  Alquilar
+                </Button>,
+              ]}
             >
-              <Meta
-                avatar={'Id: ' + p.id.toString()}
-                title={p.price + '€'}
-                description={p.description}
-              />
-              <dl>
-                <dt>Dirección postal:</dt>
-                <dd>{p.postalAddress}</dd>
-                <dt>Nombre arrendatario</dt>
-                <dd>{p.landlord.name}</dd>
-              </dl>
+              {p.isRented && (
+                <Tag color="default" icon={<StopOutlined />}>
+                  Alquilada
+                </Tag>
+              )}
             </Card>
           </Col>
         ))}
