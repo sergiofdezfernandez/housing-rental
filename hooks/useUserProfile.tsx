@@ -25,7 +25,7 @@ const useUserProfile = (supabase: SupabaseClient) => {
 
         setUserProfile({
           email: userData.user.email,
-          role: userRoleData[0]?.role_name,
+          roles: userRoleData[0]?.roles,
         });
       } catch (error) {
         console.error('Error fetching user profile:', error);

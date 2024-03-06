@@ -57,6 +57,11 @@ export async function middleware(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
+  const { data: userRoleData } = await supabase
+    .from('user_roles')
+    .select('*')
+    .eq('id', user?.id);
+
   if (
     !user &&
     !request.nextUrl.pathname.startsWith('/auth/login') &&
@@ -67,6 +72,13 @@ export async function middleware(request: NextRequest) {
 
   if ((user && request.nextUrl.pathname === '/auth/login') || request.nextUrl.pathname === '/') {
     return NextResponse.redirect(new URL('/dashboard', request.url));
+  }
+
+  if (
+    request.nextUrl.pathname === '/dashboard/properties/new' &&
+    !userRoleData?.includes('LANDLORD')
+  ) {
+    return NextResponse.redirect(new URL('/dashboard/properties', request.url));
   }
 
   return response;

@@ -3,12 +3,20 @@
 import { createWeb3Modal, defaultConfig } from '@web3modal/ethers5/react';
 const projectId = '594bfefecba4b2a63786a5d5c1874bb6';
 
-const mainnet = {
+const Goerli = {
+  chainId: 5,
+  name: 'Goerli Test Network',
+  currency: 'GoerliETH',
+  explorerUrl: 'https://etherscan.io',
+  rpcUrl: 'https://goerli.infura.io/v3/944aeb3d68b747a191c7bd773c684d20',
+};
+
+const BinanceTestNet = {
   chainId: 97,
-  name: 'BSCTestNet',
+  name: 'Binance Test Network',
   currency: 'TBNB',
   explorerUrl: 'https://etherscan.io',
-  rpcUrl: 'https://data-seed-prebsc-1-s1.bnbchain.org:8545',
+  rpcUrl: 'https://data-seed-prebsc-1-s1.binance.org:8545',
 };
 
 const metadata = {
@@ -20,7 +28,7 @@ const metadata = {
 
 createWeb3Modal({
   ethersConfig: defaultConfig({ metadata }),
-  chains: [mainnet],
+  chains: [Goerli, BinanceTestNet],
   projectId,
   enableAnalytics: true,
 });

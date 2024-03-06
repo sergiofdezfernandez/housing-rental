@@ -30,6 +30,7 @@
     "eslint-config-next": "^14.0.1",
     "eslint-config-standard-with-typescript": "^39.1.1",
     "ethers": "^5.7.2",
+    "ipfs-http-client": "^60.0.1",
     "next": "14.0.1",
     "next-transpile-modules": "^10.0.1",
     "react": "18.2.0",
@@ -43,6 +44,7 @@
     "eslint": "^8.53.0",
     "eslint-config-prettier": "^9.0.0",
     "husky": "^8.0.0",
+    "pino-pretty": "^10.3.1",
     "prettier": "3.0.3"
   }
 }

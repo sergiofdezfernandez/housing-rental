@@ -35,7 +35,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       if (userRoleError) {
         return;
       }
-      setUser({ email: userData.user.email, role: userRoleData[0]?.role_name || 'DEFAULT_ROLE' });
+      setUser({ email: userData.user.email, roles: userRoleData[0]?.roles });
     };
     fetchUser();
   }, []);

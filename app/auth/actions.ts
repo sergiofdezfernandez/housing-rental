@@ -11,7 +11,7 @@ export async function login(formData: any) {
   const { error } = await supabase.auth.signInWithPassword(formData);
 
   if (error) {
-    redirect(`/login?errorStatus=${error.status}&errorDescription=${error.message}`);
+    redirect(`/auth/login?errorStatus=${error.status}&errorDescription=${error.message}`);
   }
 
   revalidatePath('/');
@@ -22,10 +22,17 @@ export async function signup(formData: any) {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
 
-  const { error } = await supabase.auth.signUp(formData);
+  const { data, error } = await supabase.auth.signUp(formData);
 
   if (error) {
-    redirect(`/signup?errorStatus=${error.status}&errorDescription=${error.message}`);
+    redirect(`/auth/signup?errorStatus=${error.status}&errorDescription=${error.message}`);
+  } else {
+    const { error } = await supabase
+      .from('user_roles')
+      .insert([{ id: data.user?.id, roles: [formData.role] }]);
+    if (error) {
+      redirect(`/auth/signup?errorStatus=${error.code}&errorDescription=${error.message}`);
+    }
   }
 
   revalidatePath('/');

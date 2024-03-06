@@ -78,8 +78,9 @@ export default function ProposalsTable() {
           await contractInstance?.getRegisteredLeaseAgreement();
         setLoading(false);
         setLeaseAgreements(leaseAgreements);
-      } catch (error) {
-        console.log(error);
+      } catch (error: any) {
+        notification.error({ message: error.reason });
+        setLoading(false);
       }
     };
     getLeaseAgreements();

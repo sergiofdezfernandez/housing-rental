@@ -40,5 +40,5 @@ export interface Tenant {
 export interface User {
   email?: string;
   password?: string;
-  role?: string;
+  roles?: Array<string>;
 }

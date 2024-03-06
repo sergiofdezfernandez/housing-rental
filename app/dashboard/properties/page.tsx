@@ -1,18 +1,22 @@
 'use client';
 import { Property } from '@/lib/model/domain_definitions';
 import { KeyOutlined, PlusOutlined, StopOutlined } from '@ant-design/icons';
-import { Row, Col, Card, FloatButton, Button, Tag } from 'antd';
+import { Row, Col, Card, FloatButton, Button, Tag, Empty } from 'antd';
 import Title from 'antd/es/typography/Title';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useContractContext } from '@/components/shared/context/ContractContext';
+import useUserProfile from '@/hooks/useUserProfile';
+import { createClient } from '@/lib/supabase/client';
 
-const App: React.FC = () => {
+export default function properties() {
+  const supabase = createClient();
   const { replace } = useRouter();
   const [properties, setProperties] = useState<Array<Property> | null>([]);
-  const [loading, setLoading] = useState(true);
+  const [globalLoading, setLoading] = useState(true);
   const { contractInstance } = useContractContext() || {};
+  const { userProfile } = useUserProfile(supabase) || {};
   const pathname = usePathname();
 
   useEffect(() => {
@@ -42,35 +46,45 @@ const App: React.FC = () => {
 
   return (
     <section>
-      <FloatButton shape="circle" type="default" icon={<PlusOutlined />} onClick={addProperty} />
+      {userProfile?.roles?.includes('LANDLORD') && (
+        <FloatButton shape="circle" type="default" icon={<PlusOutlined />} onClick={addProperty} />
+      )}
+
       <Title level={1}>Propiedades</Title>
       <Row gutter={16}>
-        {properties?.map((p) => (
-          <Col span={4} key={p.id} xs={24} md={6}>
-            <Card
-              title={p.postalAddress}
-              loading={loading}
-              cover={
-                <Image alt="example" src="properties/house.svg" width={200} height={200}></Image>
-              }
-              actions={[
-                <Button onClick={() => rentProperty(p)} disabled={p.isRented}>
-                  <KeyOutlined />
-                  Alquilar
-                </Button>,
-              ]}
-            >
-              {p.isRented && (
-                <Tag color="default" icon={<StopOutlined />}>
-                  Alquilada
-                </Tag>
-              )}
-            </Card>
+        {properties?.length && properties.length > 0 ? (
+          properties?.map((p) => (
+            <Col span={4} key={p.id} xs={24} md={6}>
+              <Card
+                title={p.postalAddress}
+                loading={globalLoading}
+                cover={
+                  <Image alt="example" src="properties/house.svg" width={200} height={200}></Image>
+                }
+                actions={[
+                  <Button
+                    onClick={() => rentProperty(p)}
+                    disabled={p.isRented || userProfile?.roles?.includes('LANDLORD')}
+                  >
+                    <KeyOutlined />
+                    Alquilar
+                  </Button>,
+                ]}
+              >
+                {p.isRented && (
+                  <Tag color="default" icon={<StopOutlined />}>
+                    Alquilada
+                  </Tag>
+                )}
+              </Card>
+            </Col>
+          ))
+        ) : (
+          <Col span={24}>
+            <Empty />
           </Col>
-        ))}
+        )}
       </Row>
     </section>
   );
-};
-
-export default App;
+}
