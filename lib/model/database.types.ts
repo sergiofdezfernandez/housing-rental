@@ -6,15 +6,15 @@ export interface Database {
       user_roles: {
         Row: {
           id: string;
-          role_name: string | null;
+          roles: Array<string> | undefined;
         };
         Insert: {
           id: string;
-          role_name?: string | null;
+          roles?: Array<string> | undefined;
         };
         Update: {
           id?: string;
-          role_name?: string | null;
+          roles?: Array<string> | undefined;
         };
         Relationships: [];
       };

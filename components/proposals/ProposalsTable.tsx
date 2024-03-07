@@ -7,8 +7,12 @@ import { useContractContext } from '../shared/context/ContractContext';
 import notification from 'antd/es/notification';
 import Space from 'antd/es/space';
 import { Button, Card, Flex, Tag } from 'antd';
+import useUserProfile from '@/hooks/useUserProfile';
+import { createClient } from '@/lib/supabase/client';
 
 export default function ProposalsTable() {
+  const supabase = createClient();
+  const { userProfile } = useUserProfile(supabase);
   const columns: TableProps<LeaseAgreement>['columns'] = [
     {
       title: 'Comienzo del contrato',
@@ -57,7 +61,7 @@ export default function ProposalsTable() {
         <Space size="middle">
           <Button
             onClick={() => acceptAgreement(record.id)}
-            disabled={record.state !== State.Created}
+            disabled={record.state !== State.Created || record.tenant.email === userProfile?.email}
           >
             Aceptar
           </Button>
@@ -70,26 +74,40 @@ export default function ProposalsTable() {
 
   const [loading, setLoading] = useState<boolean>();
 
-  useEffect(() => {
-    const getLeaseAgreements = async () => {
-      try {
+  const getLeaseAgreements = async () => {
+    try {
+      if (contractInstance && userProfile) {
         setLoading(true);
         const leaseAgreements: LeaseAgreement[] =
           await contractInstance?.getRegisteredLeaseAgreement();
-        setLoading(false);
-        setLeaseAgreements(leaseAgreements);
-      } catch (error: any) {
-        notification.error({ message: error.reason });
+        setLeaseAgreementsByRole(leaseAgreements);
         setLoading(false);
       }
-    };
+    } catch (error: any) {
+      notification.error({ message: error.reason });
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     getLeaseAgreements();
-  }, [contractInstance]);
+  }, [contractInstance, userProfile]);
+
+  function setLeaseAgreementsByRole(leaseAgreements: Array<LeaseAgreement>) {
+    if (userProfile?.roles?.includes('LANDLORD')) {
+      setLeaseAgreements(
+        leaseAgreements.filter((la) => la.property.landlord.email === userProfile.email)
+      );
+    } else if (userProfile?.roles?.includes('TENANT')) {
+      setLeaseAgreements(leaseAgreements.filter((la) => la.tenant.email === userProfile.email));
+    }
+  }
 
   async function acceptAgreement(agreementId: number) {
     try {
       const tx = await contractInstance?.acceptLeaseAgreement(agreementId);
       tx.wait();
+      getLeaseAgreements();
     } catch (error: any) {
       notification.error({
         message: error.reason,

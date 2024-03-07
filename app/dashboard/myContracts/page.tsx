@@ -20,7 +20,7 @@ const App: React.FC = () => {
       try {
         const leaseAgreements: LeaseAgreement[] =
           await contractInstance?.getRegisteredLeaseAgreement();
-        setLeaseAgreements(leaseAgreements.filter((la) => la.tenant.email === userProfile?.email));
+        setLeaseAgreements(leaseAgreements);
       } catch (error) {
         console.error(error);
       }
