@@ -1,18 +1,21 @@
 'use client';
-import { LeaseAgreement, Property, State } from '@/lib/model/domain_definitions';
+import { ContractFile, LeaseAgreement, Property, State } from '@/lib/model/domain_definitions';
 import { TableProps } from 'antd/es/table';
 import Table from 'antd/es/table/Table';
 import { ReactNode, useEffect, useState } from 'react';
-import { useContractContext } from '../shared/context/ContractContext';
+import { useContractContext } from '../../shared/context/ContractContext';
 import notification from 'antd/es/notification';
 import Space from 'antd/es/space';
-import { Button, Card, Flex, Tag } from 'antd';
+import { Button, Tag, Tooltip } from 'antd';
 import useUserProfile from '@/hooks/useUserProfile';
 import { createClient } from '@/lib/supabase/client';
+import { EuroCircleOutlined } from '@ant-design/icons';
+import { useRouter } from 'next/navigation';
 
 export default function ProposalsTable() {
   const supabase = createClient();
   const { userProfile } = useUserProfile(supabase);
+  const router = useRouter();
   const columns: TableProps<LeaseAgreement>['columns'] = [
     {
       title: 'Comienzo del contrato',
@@ -55,23 +58,46 @@ export default function ProposalsTable() {
       render: (state: number) => <span>{getTagByStatus(state)}</span>,
     },
     {
+      title: 'Fichero de contrato',
+      key: 'file',
+      dataIndex: 'file',
+      render: (file: ContractFile) => <span>{file.fileName}</span>,
+    },
+    {
       title: 'Acciones',
       key: 'action',
       render: (_, record) => (
         <Space size="middle">
           <Button
             onClick={() => acceptAgreement(record.id)}
-            disabled={record.state !== State.Created || record.tenant.email === userProfile?.email}
+            disabled={record.state !== State.Created || userProfile?.roles?.includes('TENANT')}
           >
             Aceptar
           </Button>
+          <Button onClick={() => viewDetailedLeaseAgreement(record.id)}>Detalles</Button>
+          <Tooltip title="Pagar">
+            <Button
+              onClick={() => payRent(record.id, record.property.price)}
+              disabled={userProfile?.roles?.includes('LANDLORD')}
+              icon={<EuroCircleOutlined />}
+            >
+              Pagar Renta
+            </Button>
+          </Tooltip>
+          <Tooltip title="Finalizar Alquiler">
+            <Button
+              onClick={() => returnProperty(record.id)}
+              disabled={userProfile?.roles?.includes('LANDLORD')}
+            >
+              Finalizar Contrato
+            </Button>
+          </Tooltip>
         </Space>
       ),
     },
   ];
   const [leaseAgreements, setLeaseAgreements] = useState<Array<LeaseAgreement> | undefined>([]);
   const { contractInstance } = useContractContext() || {};
-
   const [loading, setLoading] = useState<boolean>();
 
   const getLeaseAgreements = async () => {
@@ -88,6 +114,26 @@ export default function ProposalsTable() {
       setLoading(false);
     }
   };
+
+  function viewDetailedLeaseAgreement(agreementId: number): void {
+    router.push('/dashboard/proposals/' + agreementId);
+  }
+
+  async function payRent(agreementId: number, price: number) {
+    try {
+      await contractInstance?.payRent(agreementId, { value: price });
+    } catch (error: any) {
+      notification.error({ message: error.reason });
+    }
+  }
+
+  async function returnProperty(agreementId: number) {
+    try {
+      await contractInstance?.returnProperty(agreementId);
+    } catch (error: any) {
+      notification.error({ message: error.reason });
+    }
+  }
 
   useEffect(() => {
     getLeaseAgreements();
@@ -136,22 +182,6 @@ export default function ProposalsTable() {
       loading={loading}
       rowKey={'id'}
       pagination={{ position: ['bottomCenter'], pageSize: 5 }}
-      expandable={{
-        expandedRowRender: (record) => (
-          <Flex gap={'middle'} align="center" justify="space-around">
-            <Card title={'Inquilino'}>
-              <p>{record.tenant.email}</p>
-              <p>{record.tenant.name}</p>
-              <p>{record.tenant.phoneNumber}</p>
-            </Card>
-            <Card title={'Propiedad'}>
-              <p>{record.property.postalAddress}</p>
-              <p>{record.property.description}</p>
-              <p>{record.property.price.toString()}€</p>
-            </Card>
-          </Flex>
-        ),
-      }}
     />
   );
 }

@@ -7,3 +7,9 @@ footer {
 main {
   margin: 3em;
 }
+.ant-breadcrumb .ant-breadcrumb-item.active {
+  font-weight: bold;
+}
+.ant-breadcrumb .ant-breadcrumb-item:hover {
+  color: #40a9ff;
+}

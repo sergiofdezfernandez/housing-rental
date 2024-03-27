@@ -7,6 +7,7 @@ import { useContractContext } from '../shared/context/ContractContext';
 import { useWeb3ModalAccount } from '@web3modal/ethers5/react';
 import { User } from '@/lib/model/domain_definitions';
 import { useRouter } from 'next/navigation';
+import PrefixSelector from '../shared/context/prefixSelector';
 
 export default function RentPropertyForm(props: { userProfile: User | null }) {
   const searchParams = useSearchParams();
@@ -67,20 +68,29 @@ export default function RentPropertyForm(props: { userProfile: User | null }) {
             label="Nombre"
             name="tenantName"
             rules={[{ required: true, message: 'Please enter your tenant name' }]}
+            hasFeedback
           >
             <Input />
           </Form.Item>
           <Form.Item
             label="Teléfono"
             name="tenantPhone"
-            rules={[{ required: true, message: 'Please enter your tenant phone' }]}
+            rules={[
+              { required: true, message: 'Please enter your tenant phone' },
+              {
+                pattern: new RegExp('(?:6[0-9]|7[1-9])[0-9]{7}$'),
+                message: 'El número no es correcto',
+              },
+            ]}
+            hasFeedback
           >
-            <Input />
+            <Input addonBefore={<PrefixSelector />} />
           </Form.Item>
           <Form.Item
             label="Duración"
             name="duration"
             rules={[{ required: true, message: 'Please enter the lease duration' }]}
+            hasFeedback
           >
             <Input type="number" />
           </Form.Item>
@@ -89,11 +99,6 @@ export default function RentPropertyForm(props: { userProfile: User | null }) {
               label="Depósito de seguridad"
               name="deposit"
               initialValue={searchParams.get('securityDeposit')}
-              rules={[
-                {
-                  message: 'Please enter the property security deposit',
-                },
-              ]}
             >
               <Input type="number" disabled />
             </Form.Item>

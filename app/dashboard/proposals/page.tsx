@@ -1,7 +1,6 @@
-'use client';
 import React from 'react';
 import Title from 'antd/es/typography/Title';
-import ProposalsTable from '@/components/proposals/ProposalsTable';
+import ProposalsTable from '@/components/ui/proposals/ProposalsTable';
 
 const App: React.FC = () => {
   return (

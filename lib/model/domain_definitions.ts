@@ -22,6 +22,14 @@ export interface LeaseAgreement {
   leaseDuration: number;
   totalRentPaid: number;
   state: State;
+  file: ContractFile;
+}
+
+export interface ContractFile {
+  fileName: string;
+  ipfsHash: string;
+  uploadDate: Date;
+  leaseAgreementId: number;
 }
 
 export enum State {

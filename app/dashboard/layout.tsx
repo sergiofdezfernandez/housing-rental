@@ -1,4 +1,5 @@
 'use client';
+import CustomBreadCrumb from '@/components/shared/Breadcrumb';
 import { CustomHeader } from '@/components/shared/CustomHeader';
 import { User } from '@/lib/model/domain_definitions';
 import { createClient } from '@/lib/supabase/client';
@@ -10,9 +11,28 @@ import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 
 const links = [
-  { name: 'Inicio', href: '/dashboard', icon: HomeOutlined },
-  { name: 'Propiedades', href: '/dashboard/properties', icon: UnorderedListOutlined },
-  { name: 'Mis contratos', href: '/dashboard/proposals', icon: FolderOpenOutlined },
+  { key: 1, title: 'Inicio', href: '/dashboard', icon: HomeOutlined, isOnMenu: true },
+  {
+    key: 2,
+    title: 'Propiedades',
+    href: '/dashboard/properties',
+    icon: UnorderedListOutlined,
+    isOnMenu: true,
+  },
+  {
+    key: 3,
+    title: 'Nueva propiedad',
+    href: '/dashboard/properties/new',
+    isOnMenu: false,
+    icon: React.Component,
+  },
+  {
+    key: 4,
+    title: 'Mis contratos',
+    href: '/dashboard/proposals',
+    icon: FolderOpenOutlined,
+    isOnMenu: true,
+  },
 ];
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
@@ -52,11 +72,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <Sider breakpoint="lg" collapsedWidth={0}>
           <Menu
             theme="dark"
-            items={[...links].map((link, index) => ({
-              key: String(index + 1),
-              icon: React.createElement(link.icon),
-              label: <Link href={link.href}>{link.name}</Link>,
-            }))}
+            items={[...links]
+              .filter((link) => link.isOnMenu)
+              .map((link) => ({
+                key: link.key,
+                icon: React.createElement(link.icon),
+                label: <Link href={link.href}>{link.title}</Link>,
+              }))}
           />
         </Sider>
       </>
@@ -70,6 +92,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             borderRadius: borderRadiusLG,
           }}
         >
+          <CustomBreadCrumb />
           {children}
         </Content>
         <Footer>Developed by Sergio Fernández ©2023-2024</Footer>

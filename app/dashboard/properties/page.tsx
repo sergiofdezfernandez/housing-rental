@@ -12,7 +12,7 @@ import { createClient } from '@/lib/supabase/client';
 
 export default function properties() {
   const supabase = createClient();
-  const { replace } = useRouter();
+  const { replace, push } = useRouter();
   const [properties, setProperties] = useState<Array<Property> | null>([]);
   const [globalLoading, setLoading] = useState(true);
   const { contractInstance } = useContractContext() || {};
@@ -33,7 +33,7 @@ export default function properties() {
   }, [contractInstance]);
 
   function addProperty() {
-    replace(`${pathname}/new`);
+    push(`${pathname}/new`);
   }
 
   function rentProperty(property: Property) {
@@ -59,7 +59,15 @@ export default function properties() {
                 title={p.postalAddress}
                 loading={globalLoading}
                 cover={
-                  <Image alt="example" src="properties/house.svg" width={200} height={200}></Image>
+                  <Image
+                    alt="house image"
+                    src="properties/house.svg"
+                    style={{ objectFit: 'contain', height: 'auto' }}
+                    priority={true}
+                    width={200}
+                    height={200}
+                    sizes="100vw"
+                  ></Image>
                 }
                 actions={[
                   <Button
